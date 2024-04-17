@@ -1,0 +1,9 @@
+.init {
+    justify-content: space-around;
+    align-items: center;
+    height: 88vh;
+}
+.sw-text {
+    text-shadow: -3px 3px 4px  #a3a3a3;
+    letter-spacing: 1px;
+}
