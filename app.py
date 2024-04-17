@@ -14,6 +14,7 @@ app.config['SECRET_KEY']='security key momently'
 def inicio():
     return controller.login()
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     return controller.login()
