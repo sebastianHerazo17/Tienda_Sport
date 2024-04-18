@@ -27,5 +27,9 @@ def index():
 def productos():
     return controller.productos()
 
+@app.route('/registrar_productos', methods=['POST'])
+def registrar_productos():
+    return controller.registrar_productos()
+
 if __name__ == '__main__':
     app.run(debug=True)

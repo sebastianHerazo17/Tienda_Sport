@@ -66,6 +66,24 @@ def productos():
 def consultar_productos():
     return productos
 
+def registrar_productos():
+    # Obtener los datos del formulario
+    tipo = request.form['tipo']
+    referencia = request.form['referencia']
+    cantidad = int(request.form['cantidad'])
+    costo = float(request.form['costo'])
+    precio = float(request.form['precio'])
+    
+    # Crear un nuevo objeto Producto con los datos recibidos
+    nuevo_producto = Producto(tipo=tipo, referencia=referencia, cantidad=cantidad, costo=costo, precio=precio)
+    
+    # Guardar el nuevo producto en la base de datos
+    session.add(nuevo_producto)
+    session.commit()
+    
+    # Redirigir a la página de productos después de guardar el producto
+    return redirect(url_for('productos'))
+
 def producto():
     # Realizar una consulta para obtener todos los productos
     productos= session.query(Producto).all()
