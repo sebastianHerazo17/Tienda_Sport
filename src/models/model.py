@@ -26,7 +26,7 @@ class Usuario(Base):
     
 
 # Crear el motor de la base de datos (usando MySQL)
-engine = create_engine('mysql://root:@localhost/tienda')
+engine = create_engine('mysql://root:qwe.123@localhost/tienda')
 
 # Crear una sesión para interactuar con la base de datos
 Session = sessionmaker(bind=engine)
