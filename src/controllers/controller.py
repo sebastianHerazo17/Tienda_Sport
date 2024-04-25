@@ -1,7 +1,7 @@
-from flask import  Flask, render_template, request, redirect, url_for
-from flask import session as ses
+from flask import render_template, request, redirect, url_for
+from flask import session
 from src.models.model import *
-from src.db import db
+# from src.db import db
 
 class MyClass:
     def __init__(self):
@@ -15,13 +15,13 @@ class MyClass:
 obj = MyClass()
 
 
-def index1():   
-    productos = db.connection("Select * from Producto")
-    if productos:
-        for Producto in productos:
-            return productos
-    else:
-        print("No se pudieron obtener los productos.")
+# def index1():   
+#     productos = db.connection("Select * from Producto")
+#     if productos:
+#         for Producto in productos:
+#             return productos
+#     else:
+#         print("No se pudieron obtener los productos.")
 
 
 
@@ -52,10 +52,12 @@ def logout():
     return redirect(url_for('login'))
 
 def index():
+    productos_bajo_stock = session.query(Producto).filter(Producto.cantidad <= 10).all()
     if obj.get_boolean() is True:
-        return render_template('index.html')
+        return render_template('index.html',productos_bajo_stock=productos_bajo_stock)
     else: 
         return redirect(url_for('login'))
+    
 def productos():
     productos = session.query(Producto).all()
     if obj.get_boolean() is True:
@@ -71,8 +73,8 @@ def registrar_productos():
     tipo = request.form['tipo']
     referencia = request.form['referencia']
     cantidad = int(request.form['cantidad'])
-    costo = float(request.form['costo'])
-    precio = float(request.form['precio'])
+    costo = float(request.form['costo'].replace('$', '').replace('.',''))
+    precio = float(request.form['precio'].replace('$', '').replace('.',''))
     
     # Crear un nuevo objeto Producto con los datos recibidos
     nuevo_producto = Producto(tipo=tipo, referencia=referencia, cantidad=cantidad, costo=costo, precio=precio)
@@ -84,7 +86,32 @@ def registrar_productos():
     # Redirigir a la página de productos después de guardar el producto
     return redirect(url_for('productos'))
 
-def producto():
-    # Realizar una consulta para obtener todos los productos
-    productos= session.query(Producto).all()
-    return render_template('productos.html', productos=productos)
+def editar_productos(idProducto):
+    producto=session.query(Producto).filter_by(idProducto=idProducto).first()
+    productos = session.query(Producto).all()
+    return render_template('productos.html', producto=producto, productos=productos)
+
+
+def modificar_productos(idProducto):
+    tipo = request.form['tipo']
+    referencia = request.form['referencia']
+    cantidad = int(request.form['cantidad'])
+    costo = float(request.form['costo'].replace('$', '').replace('.',''))
+    precio = float(request.form['precio'].replace('$', '').replace('.',''))
+
+    producto = session.query(Producto).get(idProducto)
+
+    producto.tipo = tipo
+    producto.referencia = referencia
+    producto.cantidad = cantidad
+    producto.costo = costo
+    producto.precio = precio
+
+    session.commit()
+    return redirect(url_for('productos'))
+
+def eliminar_productos(idProducto):
+    producto = session.query(Producto).get(idProducto)
+    session.delete(producto)
+    session.commit()
+    return redirect(url_for('productos'))

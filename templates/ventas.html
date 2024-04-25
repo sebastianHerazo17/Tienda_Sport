@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Sport - Ventas</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/flowbite.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/sweetalert2.min.css')}}">
+    <script src="{{url_for('static',filename='src/js/sweetalert2.all.min.js')}}"></script>
+</head>
+<body> 
+    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200  ">
+        <span class="sr-only">Abrir</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+        </svg>
+    </button>
+    
+    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 ">
+        <a href="/inicio" class="flex items-center ps-2.5 mb-5">
+            <img src="{{url_for('static',filename='src/img/logoTemporal.png')}}" class="h-6 me-3 sm:h-7" alt="Logo" />
+        </a>
+        <ul class="space-y-2 font-medium">
+            <li>
+                <a href="/inicio" class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 group">
+                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                    <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
+                    <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                    </svg>
+                    <span class="ms-3">Inicio</span>
+                </a>
+            </li>
+            <li>
+                <a href="/ventas" class="flex items-center p-2 text-gray-900 rounded-lg  bg-gray-100 group">
+                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                        <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Ventas</span>
+                    <!-- <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full  dark:text-gray-300">Pro</span> -->
+                </a>
+            </li>
+            <li>
+                <a href="/productos" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                    <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/>
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Productos</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 group">
+                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                    <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Clientes</span>
+                </a>
+            </li>
+            <li>
+                <a href="login" class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 group">
+                   <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
+                   </svg>
+                   <span class="flex-1 ms-3 whitespace-nowrap">Cerrar Sesión</span>
+                </a>
+             </li>
+        </ul>
+        </div>
+    </aside>
+    
+    
+
+    <div class="p-4 sm:ml-64 h-screen">
+        <div class="p-4 rounded-lg">
+            <div class="flex items-center w-full mb-4 justify-center h-full mb-4 rounded flex-col">
+                <h2 class="max-w-lg text-3xl mb-5 text-center font-semibold leading-normal text-gray-900">VENTAS</h2>
+                <h2 class="max-w-lg text-2xl mb-4 text-center font-semibold leading-normal text-gray-900">Registrar cliente</h2>
+                <div class="relative mt-1 mb-4 flex items-center gap-4 justify-center">
+                    <div class="flex flex-col text-gray-900 dark:text-white">
+                        <label for="nombreCli" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre del cliente:</label>
+                        <input type="text" id="nombreCli" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre del cliente" required />
+                    </div>
+                    <div class="flex flex-col text-gray-900 dark:text-white">
+                        <label for="numeroCli" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular del cliente:</label>
+                        <input type="text" id="numeroCli" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Celular del cliente" required />
+                    </div>
+                </div>
+                <button onclick="registrarCliente()" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
+                    <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                        REGISTRAR CLIENTE
+                    </span>
+                </button>
+            </div>
+            <div class="grid grid-cols-2 mt-5 mb-8 h-full gap-4">
+                <div class="flex items-center w-full h-full justify-start flex-col p-1 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 sm:p-1">
+                    <h2 class="max-w-lg text-2xl text-center font-semibold leading-normal text-gray-900">Lista de productos</h2>
+                    <div class="flex flex-wrap items-start w-full my-4 gap-6 items-end">
+                        <div class="bg-white mx-4 ">
+                            <div class="relative mt-1 flex items-center gap-4 justify-start">
+                                <div class="flex flex-col text-gray-900 ">
+                                        <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 ">Buscar tipo:</label>
+                                        <select id="tipo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                            <option value="Camiseta">Camiseta</option>
+                                            <option value="Camisa">Camisa</option>
+                                            <option value="Jeans Hombre">Jeans Hombre</option>
+                                            <option value="Jeans Mujer">Jeans Mujer</option>
+                                            <option value="Blusa">Blusa</option>
+                                            <option value="Boxer">Boxer</option>
+                                            <option value="Sandalias">Sandalias</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col text-gray-900 ">
+                                        <label for="referencia" class="block mb-2 text-sm font-medium text-gray-900 ">Buscar referencia:</label>
+                                        <select id="referencia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                            <option value="1.1">1.1</option>
+                                            <option value="Importado">Importado</option>
+                                            <option class="AAA">AAA</option>
+                                            <option class="Nacional">Nacional</option>
+                                        </select>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative overflow-x-auto shadow-md w-full text-center sm:rounded-lg">
+                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg rounded">
+                            <table class="w-full text-sm text-center shadow-md rtl:text-right text-gray-500 ">
+                                <thead class="w-full text-xs text-gray-700 text-center uppercase bg-gray-50  ">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            TIPO
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            REFERENCIA
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            DISPONIBLES
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            PRECIO
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            CANTIDAD
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabPro" class="shadow-md">
+                                    <td></td>
+                                    <td></td>
+                                    <td>No hay productos registrados.</td>
+                                    <td></td>
+                                    <td></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col mb-2 w-full h-full items-center justify-start rounded">
+                    <div class="flex flex-col w-full items-center justify-center rounded">
+                        <h2 class="max-w-lg text-2xl mb-2 font-semibold leading-normal text-gray-900">Información de la venta</h2>
+                        <div class="relative mt-1 mb-4 flex items-center gap-4 justify-center">
+                            <div class="flex flex-col text-gray-900 dark:text-white">
+                                <label for="tipoVenta" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de Pago:</label>
+                                <select id="tipoVenta" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="De contado">De contado</option>
+                                    <option value="Fiado">Fiado</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col text-gray-900 dark:text-white">
+                                <label for="selectCli" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar cliente:</label>
+                                <select id="selectCli"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="0">Seleccionar cliente</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col w-full mt-3 items-center justify-center rounded">
+                        <h2 class="max-w-lg text-2xl font-semibold leading-normal text-gray-900">Carrito de compras</h2>
+                        <div class="relative overflow-x-auto shadow-md mt-6 sm:rounded-lg">
+                            <table class="w-full text-sm text-center rtl:text-right text-gray-500 ">
+                                <thead class="w-full text-xs text-gray-700 text-center uppercase bg-gray-50  ">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            TIPO
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            REFERENCIA
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            CANTIDAD
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            PRECIO
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            DESCUENTO
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabBody" class="text-center w-full">
+                                    <tr><td></td><td></td><td>Carrito está vacio</td><td></td><td></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button onclick="enviarVenta()" class="relative inline-flex items-center mt-6 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white  focus:ring-4 focus:outline-none focus:ring-green-200 ">
+                            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0">
+                            REGISTRAR VENTA
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+        <footer class="bg-gray-100 w-full mt-10 relative bottom-0 left-0 rounded-lg">
+            <div class="w-full mx-auto max-w-screen-xl p-4 flex items-center justify-end gap-6">
+            <span class="text-sm text-gray-500 me-8 sm:text-center ">© 2024 <a href="https://flowbite.com/" class="hover:underline">TiendaSport™</a>. Todos los derechos reservados
+            </span>
+            <ul class="flex flex-wrap items-center mt-3 ms-8 text-sm font-medium text-gray-500  sm:mt-0">
+                <li>
+                    <a href="https://wa.me/573245693084" target="_blank" class="hover:underline">Contacta al desarrollador</a>
+                </li>
+            </ul>
+            </div>
+        </footer>
+    </div>
+    <script src="{{url_for('static',filename='src/js/axios.min.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/flowbite.min.js')}}"></script>
+    <script>
+        var productos = {{ productos | tojson }};
+        var clientes = {{ clientes | tojson }};
+        var carrito = [];
+        const tabBody = document.getElementById('tabBody');
+        console.log(productos);
+        console.log(clientes);
+
+        //Swal.fire("SweetAlert2 is working!", "Bienvenido a la ventana de Ventas", "info");
+    </script>
+    <script src="{{url_for('static',filename='src/js/inputs.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/ventasFunctions.js')}}"></script>
+    
+</body>
+</html>
