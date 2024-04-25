@@ -94,27 +94,63 @@ function listarCarrito() {
         </tr>
         `});
         tabBody.innerHTML += `
-        <tr class="bg-white border-t">
-            <td class="px-6 py-4"></td>
-            <td class="px-6 py-4"></td>
-            <td class="px-6 py-4 font-semibold text-gray-900 ">
-                TOTAL
+        <tr id="filaTotalProducto" class="bg-white border-t">
+            <td class="px-6 py-2"></td>
+            <td class="px-6 py-2"></td>
+            <td class="px-2 py-2 font-medium text-right text-gray-900 ">
+                Precio total:
             </td>
-            <td id="total" class="px-6 py-4 font-semibold text-gray-900 ">
+            <td id="totalPro" class="px-6 py-2 font-medium line-through text-left text-gray-900 ">
+                ${moneda(totalProductos())}
+            </td>
+            <td class="px-6 py-2"></td>
+        </tr>
+        <tr id="filaDescuento" class="bg-white ">
+            <td class="px-6 py-2"></td>
+            <td class="px-6 py-2"></td>
+            <td class="px-2 py-2 font-medium text-right text-gray-900 ">
+                Descuento:
+            </td>
+            <td id="desc" class="px-6 py-2 font-medium  text-left text-gray-900 ">
+                ${moneda(totalDescuento())}
+            </td>
+            <td class="px-6 py-2"></td>
+        </tr>
+        <tr class="bg-white ">
+            <td class="px-6 py-2"></td>
+            <td class="px-6 py-2"></td>
+            <td class="px-2 py-2 text-right font-semibold text-gray-900 ">
+                TOTAL A PAGAR:
+            </td>
+            <td id="total" class="px-6 py-2 text-left font-semibold text-gray-900 ">
                 ${moneda(total())}
             </td>
-            <td class="px-6 py-4"></td>
+            <td class="px-6 py-2"></td>
         </tr>
         `;
 }
 
-function total() {
+function totalProductos() {
     let total = 0;
     for (const p of carrito) {
-        total += (p.precio*p.orden) - p.descuento;
+        total += (p.precio*p.orden);
     }
     return total;
 }
+
+function totalDescuento() {
+    let des = 0;
+    for (const p of carrito) {
+        des += p.descuento;
+    }
+    return des;
+}
+
+function total() {
+    return totalProductos() - totalDescuento();
+}
+
+
 
 
 // LISTAR CLIENTES
@@ -130,13 +166,14 @@ function listarClientes() {
 // REALIZAR VENTA
 
 const tipoVenta = document.getElementById('tipoVenta');
+var totalPagado = Number(document.getElementById('totalPagado').value.replace(/[$ .]/gi,''));
 
  function enviarVenta() {
     let venta = {
       identificacion: selectCli.value,
       tipoPago: tipoVenta.value,
       totalPagar: total(),
-      totalPagado: 20000,
+      totalPagado: totalPagado,
       carrito: carrito
     }
 

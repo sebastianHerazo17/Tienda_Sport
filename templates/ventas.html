@@ -205,11 +205,18 @@
                                 </tbody>
                             </table>
                         </div>
-                        <button onclick="enviarVenta()" class="relative inline-flex items-center mt-6 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white  focus:ring-4 focus:outline-none focus:ring-green-200 ">
+                        <div class="relative w-full mt-6 mb-2 flex items-center gap-4 justify-center">
+                            <div class="flex gap-2 text-gray-900 dark:text-white">
+                                <label for="totalPagado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total pagado:</label>
+                                <input type="text" id="totalPagado" oninput="formatoMoneda(event)" onblur="formatoMoneda(event)"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="$ 0" required />
+                            </div>
+                        </div>
+                        <button onclick="enviarVenta()"  class="relative inline-flex items-center mt-6 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white  focus:ring-4 focus:outline-none focus:ring-green-200 ">
                             <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0">
                             REGISTRAR VENTA
                             </span>
                         </button>
+
                     </div>
                 </div>
             </div>
@@ -240,6 +247,7 @@
     </script>
     <script src="{{url_for('static',filename='src/js/inputs.js')}}"></script>
     <script src="{{url_for('static',filename='src/js/ventasFunctions.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/formatoMoneda.js')}}"></script>
     
 </body>
 </html>

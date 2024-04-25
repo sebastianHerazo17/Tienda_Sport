@@ -19,6 +19,7 @@ function entrada(event, i) {
         const valorNumerico = parseInt(cambio, 10); // Convierte a número
         input.value = moneda(valorNumerico); // Aplica el formato de moneda
         carrito[i].descuento = Number(document.getElementById('descuento-'+i).value.replace(/[$ .]/gi,'')); // Si se quiere guardar el valor se deben reemplazar los siguientes signos
+        document.getElementById('desc').innerText = moneda(totalDescuento());
         document.getElementById('total').innerText = moneda(total());
     }
 }
