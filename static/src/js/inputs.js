@@ -21,7 +21,9 @@ function entrada(event, i) {
         carrito[i].descuento = Number(document.getElementById('descuento-'+i).value.replace(/[$ .]/gi,'')); // Si se quiere guardar el valor se deben reemplazar los siguientes signos
         document.getElementById('desc').innerText = moneda(totalDescuento());
         document.getElementById('total').innerText = moneda(total());
+        document.getElementById('cambio').innerText = moneda(devueltas());
     }
+    ocultarFilas()
 }
 
 //ENVIO DE VENTA

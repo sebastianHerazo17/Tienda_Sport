@@ -17,3 +17,11 @@ function formatoMoneda(event) {
         input.value = moneda(valorNumerico); // Aplica el formato de moneda
     }
 }
+
+function mostrarCambio(event){
+    formatoMoneda(event);
+    document.getElementById('cambio').innerText = moneda(devueltas());
+    const text = document.getElementById('textoCambio');
+    if (devueltas()<0) text.innerText = "Debe:"
+    else text.innerText = "Cambio:"
+}
