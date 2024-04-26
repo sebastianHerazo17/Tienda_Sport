@@ -88,34 +88,104 @@ function listarCarrito() {
             </td>
             <td class="px-6 py-4">
                 <div class="flex items-center">
-                        <input type="text" id="descuento-${i}" onblur="entrada(event,${i})" oninput="entrada(event,${i})" class="bg-gray-50 w-24 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1" placeholder="0" required />
+                        <input type="text" id="descuento-${i}" onblur="entrada(event,${i})" oninput="entrada(event,${i})" class="bg-gray-50 w-24 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1" placeholder="$ 0" required />
                 </div>
             </td>
         </tr>
         `});
         tabBody.innerHTML += `
-        <tr class="bg-white border-t">
-            <td class="px-6 py-4"></td>
-            <td class="px-6 py-4"></td>
-            <td class="px-6 py-4 font-semibold text-gray-900 ">
-                TOTAL
+        <tr id="filaTotalProducto" class="bg-white hidden border-t">
+            <td class="px-6 py-2"></td>
+            <td class="px-6 py-2"></td>
+            <td class="px-2 py-2 font-medium text-right text-gray-900 ">
+                Precio total:
             </td>
-            <td id="total" class="px-6 py-4 font-semibold text-gray-900 ">
+            <td id="totalPro" class="px-6 py-2 font-medium line-through text-left text-gray-900 ">
+                ${moneda(totalProductos())}
+            </td>
+            <td class="px-6 py-2"></td>
+        </tr>
+        <tr id="filaDescuento" class="bg-white hidden">
+            <td class="px-6 py-2"></td>
+            <td class="px-6 py-2"></td>
+            <td class="px-2 py-2 font-medium text-right text-gray-900 ">
+                Descuento:
+            </td>
+            <td id="desc" class="px-6 py-2 font-medium  text-left text-gray-900 ">
+                ${moneda(totalDescuento())}
+            </td>
+            <td class="px-6 py-2"></td>
+        </tr>
+        <tr class="bg-white ">
+            <td class="px-6 py-2"></td>
+            <td class="px-6 py-2"></td>
+            <td class="px-2 py-2 text-right font-semibold text-gray-900 ">
+                TOTAL A PAGAR:
+            </td>
+            <td id="total" class="px-6 py-2 text-left font-semibold text-gray-900 ">
                 ${moneda(total())}
             </td>
-            <td class="px-6 py-4"></td>
+            <td class="px-6 py-2"></td>
+        </tr>
+        <tr class="bg-white ">
+            <td class="px-6 py-2">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total pagado:</label>
+            </td>
+            <td class="px-6 py-2">
+                <input type="text" id="pagoVenta" oninput="mostrarCambio(event)" onblur="mostrarCambio(event)"  class="bg-gray-50 w-24 text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1"  placeholder="$ 0" required />
+            </td>
+            <td id="textoCambio" class="px-2 py-2 text-right font-semibold text-gray-900 ">
+                Cambio:
+            </td>
+            <td id="cambio" class="px-6 py-2 text-left font-semibold text-gray-900 ">
+                $ 0
+            </td>
+            <td class="px-6 py-2"></td>
         </tr>
         `;
 }
 
-function total() {
+function totalProductos() {
     let total = 0;
     for (const p of carrito) {
-        total += (p.precio*p.orden) - p.descuento;
+        total += (p.precio*p.orden);
     }
     return total;
 }
 
+function totalDescuento() {
+    let des = 0;
+    for (const p of carrito) {
+        des += p.descuento;
+    }
+    
+    return des;
+}
+
+function total() {
+    return totalProductos() - totalDescuento();
+}
+
+var pago;
+function ingresoPago() {
+    pago = document.getElementById('pagoVenta').value
+    return Number(pago.replace(/[$ .]/gi,''))
+}
+function devueltas() {
+    return ingresoPago() - total();
+}
+
+function ocultarFilas(){
+    const filaTotal =  document.getElementById('filaTotalProducto');
+    const filaDescuento = document.getElementById('filaDescuento');
+    if(totalDescuento()===0){
+        filaTotal.classList.add('hidden');
+        filaDescuento.classList.add('hidden');
+    } else {
+        filaTotal.classList.remove('hidden');
+        filaDescuento.classList.remove('hidden');
+    }
+}
 
 // LISTAR CLIENTES
 function listarClientes() {
@@ -136,15 +206,36 @@ const tipoVenta = document.getElementById('tipoVenta');
       identificacion: selectCli.value,
       tipoPago: tipoVenta.value,
       totalPagar: total(),
-      totalPagado: 20000,
+      totalPagado:ingresoPago(),
       carrito: carrito
     }
 
-    axios.post('/registra_venta', venta)
-    .then(msg => {
-        console.log(msg.data);
-    })
-    .catch(err => {
-        console.log(err);
+    Swal.fire({
+        title: '¿Estás seguro de registrar la venta?',
+        text: "No podrás revertir esto.",
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'REGISTRAR'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.post('/registra_venta', venta)
+            .then(msg => {
+                let resp = msg.data;
+                console.log(resp);
+                if(resp === "correct"){
+                    Swal.fire("Venta registrada Correctamentemente!", "", "success");
+                    setTimeout(() => {
+                        location.href = "/ventas";
+                    }, 1000);
+                } 
+                else if (resp === "pagoCero") Swal.fire("Ocurrió un error", "Se debe ingresar el valor total de pago si es de contado.", "error");
+                else if (resp === "TipoPagoInvalido") Swal.fire("Ocurrió un error", "El tipo de pago no es valido.", "error");
+                else if (resp === "clienteInvalido") Swal.fire("Ocurrió un error", "Debe seleccionar un cliente para poder Fiar.", "error");
+            })
+            .catch(err => {
+                console.log(err);
+                Swal.fire("Ocurrió un error, intenta nuevamente.", "", "error");
+            });
+        }
     });
  }
