@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for
 from flask import session
 from src.models.model import *
+from datetime import datetime, timedelta
 # from src.db import db
 
 class MyClass:
@@ -52,9 +53,27 @@ def logout():
     return redirect(url_for('login'))
 
 def index():
+    #Cual es la fecha de hace 20 días
+    fecha20 = datetime.now() - timedelta(days=20)
+    #comparar las fechas y el tipo de venta
+    ventas_fiadas = session.query(Venta).filter(Venta.fecha <= fecha20, Venta.tipoPago == 'Fiado').all()
+
+    ids_clientes_con_deuda = [venta.identificacion for venta in ventas_fiadas]
+
+    clientes_con_deuda = session.query(Cliente).filter(Cliente.identificacion.in_(ids_clientes_con_deuda)).all()
+
     productos_bajo_stock = session.query(Producto).filter(Producto.cantidad <= 10).all()
+
+    deuda_clientes = {}
+    for cliente in clientes_con_deuda:
+        deuda = 0
+        for venta in ventas_fiadas:
+            if venta.identificacion == cliente.identificacion:
+                deuda += (venta.totalPagar-venta.totalPagado)
+        deuda_clientes[cliente.identificacion] = deuda
+
     if obj.get_boolean() is True:
-        return render_template('index.html',productos_bajo_stock=productos_bajo_stock)
+        return render_template('index.html',productos_bajo_stock=productos_bajo_stock, clientes_con_deuda=clientes_con_deuda, deuda_clientes=deuda_clientes)
     else: 
         return redirect(url_for('login'))
     

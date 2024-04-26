@@ -30,9 +30,22 @@ def queryProducto():
     return json_productos
 
 def ventas():
+    ventas = session.query(Venta).all()
+    listaCli = session.query(Cliente).all()
+    nombres = {}
+    for venta in ventas:
+        nombre = ""
+        if(venta.identificacion == 1):
+            nombre = "Venta en caja"
+        else:
+            for cli in listaCli:
+                if(venta.identificacion == cli.identificacion):
+                    nombre = cli.nombre
+        nombres[venta.identificacion] = nombre
+
     productos = queryProducto()
     clientes = queryCliente()
-    return render_template('ventas.html', productos=productos, clientes=clientes)
+    return render_template('ventas.html', ventas=ventas, productos=productos, clientes=clientes, nombres=nombres)
 
 def registraCliente():
     datos = request.get_json()
@@ -54,7 +67,7 @@ def registroVenta(datos):
     identificacion = int(datos.get('identificacion'))
     tipoPago = datos.get('tipoPago')
     hoy = datetime.date.today()
-    fecha = hoy.strftime('%Y-%m-%d')
+    fecha =  hoy.strftime('%Y-%m-%d')
     totalPagar = 0
     totalPagado = float(datos.get('totalPagado'))
     carrito = datos.get('carrito')
@@ -88,7 +101,6 @@ def registroVenta(datos):
         productoMod = session.query(Producto).get(idProducto)
         productoMod.cantidad = productoMod.cantidad - orden
         session.commit()
-    return nuevaVenta
     
 def registrarVenta():
     datos = request.get_json()

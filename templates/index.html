@@ -187,12 +187,45 @@
             <div class="flex items-center justify-center rounded bg-gray-50 h-32 dark:bg-gray-800">
                 
             </div>
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                <p class="text-2xl text-gray-400 dark:text-gray-500">
-                    <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                    </svg>
-                </p>
+            <div class="flex flex-col items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                <h2 class="max-w-lg text-3x1 font-semibold leading-normal text-gray-900 my-2">CLIENTES CON DEUDA MAYOR A 20 DIAS</h2>
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="bg-red-200 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200 dark:hover:bg-gray-600">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                ID
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                NOMBRE
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                TELEFONO
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                DEUDA TOTAL
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cliente in clientes_con_deuda %}
+                        <tr class="bg-red-100 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200">
+                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ cliente.identificacion }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ cliente.nombre }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ cliente.celular }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ deuda_clientes[cliente.identificacion] | moneda }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
             </div>
             <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
                 <p class="text-2xl text-gray-400 dark:text-gray-500">

@@ -51,21 +51,25 @@ function accionCarrito(id, action) {
     const cantidad = Number(document.getElementById('cantidad-'+id).value);
     let producto = productos.find(p=>p.idProducto === id);
     let productoCarrito = carrito.find(p=> p.idProducto === producto.idProducto);
-    if(action === 'sv'){
-        if(productoCarrito === undefined) carrito.push({...producto, orden: cantidad, descuento: 0});
-        else {
-        if(productoCarrito.orden<producto.cantidad&&(productoCarrito.orden+cantidad)<=producto.cantidad) carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden += cantidad
-        else Swal.fire("LA CANTIDAD SUPERA EL STOCK DISPONIBLE", "", "warning");
+    if(producto.cantidad>0){
+        if(action === 'sv'){
+            if(productoCarrito === undefined) carrito.push({...producto, orden: cantidad, descuento: 0});
+            else {
+            if(productoCarrito.orden<producto.cantidad&&(productoCarrito.orden+cantidad)<=producto.cantidad) carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden += cantidad
+            else Swal.fire("LA CANTIDAD SUPERA EL STOCK DISPONIBLE", "", "warning");
+            }
+        } else if(action === 'dt'){
+            if(productoCarrito === undefined) Swal.fire("EL PRODUCTO NO ESTÁ EN EL CARRITO", "", "warning");
+            else if((productoCarrito.orden-cantidad) <= 0){
+                let i = carrito.findIndex(p => p.idProducto === productoCarrito.idProducto);
+                carrito.splice(i, 1);
+            }
+            else if(productoCarrito.orden>0) carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden -= cantidad;
         }
-    } else if(action === 'dt'){
-        if(productoCarrito === undefined) Swal.fire("EL PRODUCTO NO ESTÁ EN EL CARRITO", "", "warning");
-        else if((productoCarrito.orden-cantidad) <= 0){
-            let i = carrito.findIndex(p => p.idProducto === productoCarrito.idProducto);
-            carrito.splice(i, 1);
-        }
-        else if(productoCarrito.orden>0) carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden -= cantidad;
+        listarCarrito();
+    } else {
+        Swal.fire("NO HAY STOCK DISPONIBLE", "", "warning");
     }
-    listarCarrito();
 }
 
 
