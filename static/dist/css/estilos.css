@@ -7,3 +7,11 @@
     text-shadow: -3px 3px 4px  #a3a3a3;
     letter-spacing: 1px;
 }
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+input[type=number] { -moz-appearance:textfield; }

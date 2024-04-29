@@ -4,26 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
-    <link rel="stylesheet" href="css/flowbite.min.css">
-    <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/estilos.css') }}">
     <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
-    <script src="js/flowbite.min.js"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/flowbite.min.css')}}">
 </head>
 <body>
     <section class="bg-center bg-no-repeat bg-[url('')] bg-gray-50 bg-blend-multiply">
         <div class="init px-4 mx-auto max-w-screen-xl md:flex py-24 lg:py-56">
             <h1 class="mb-4 sw-text text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl">TiendaSport</h1>
-            <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+            <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
                 <form class="space-y-6" action="/login" method="POST">
-                    <h5 class="text-xl text-center font-medium text-gray-900 dark:text-white">Iniciar sesión</h5>
+                    <h5 class="text-xl text-center font-medium text-gray-900 ">Iniciar sesión</h5>
                     <div>
-                        <label for="usuario" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Usuario</label>
-                        <input type="text" name="usuario" id="usuario" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Usuario" required />
+                        <label for="usuario" class="block mb-2 text-sm font-medium text-gray-900">Usuario</label>
+                        <input type="text" name="usuario" id="usuario" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Usuario" required />
                     </div>
                     <div>
-                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
-                        <input type="password" name="contraseña" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
+                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Contraseña</label>
+                        <input type="password" name="contraseña" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required />
                     </div>
                     {% if error %}
                     <p class="error" style="color: red;">{{ error }}</p>
@@ -31,20 +29,20 @@
                     <div class="flex items-start">
                         <div class="flex items-start">
                             <div class="flex items-center h-5">
-                                <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+                                <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                             </div>
-                            <label for="remember" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Recordar usuario</label>
+                            <label for="remember" class="ms-2 text-sm font-medium text-gray-900 ">Recordar usuario</label>
                         </div>
                     </div>
-                    <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Entrar</button>
+                    <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Entrar</button>
                 </form>
             </div>
         </div>
-        <footer class=" rounded-lg shadow m-4 dark:bg-gray-800">
+        <footer class=" rounded-lg shadow m-4 ">
             <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-            <span class="text-sm sm:text-center dark:text-gray-400">© 2024 <a href="https://flowbite.com/" class="hover:underline">TiendaSport™</a>. Todos los derechos reservados
+            <span class="text-sm sm:text-center ">© 2024 <a class="hover:underline">TiendaSport™</a>. Todos los derechos reservados
             </span>
-            <ul class="flex flex-wrap items-center mt-3 text-sm font-medium dark:text-gray-400 sm:mt-0">
+            <ul class="flex flex-wrap items-center mt-3 text-sm font-medium sm:mt-0">
                 <li>
                     <a href="https://wa.me/57302236921" target="_blank" class="hover:underline">Contacta al desarrollador</a>
                 </li>

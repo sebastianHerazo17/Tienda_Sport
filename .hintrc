@@ -8,7 +8,7 @@
       {
         "list": "off"
       }
-    ],
+    ], 
     "meta-viewport": "off",
     "axe/language": [
       "default",

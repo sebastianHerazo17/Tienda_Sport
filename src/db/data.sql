@@ -14,7 +14,7 @@ PRIMARY KEY(idProducto));
 
 
 
-CREATE TABLE Usuarios (
+CREATE TABLE Usuario (
   idUsuario INTEGER UNSIGNED  NOT NULL   AUTO_INCREMENT,
   usuario VARCHAR(20)  NULL  ,
   contraseña VARCHAR(100)  NULL    ,
@@ -32,7 +32,7 @@ PRIMARY KEY(idEgresos));
 
 
 CREATE TABLE Cliente (
-  identificacion INTEGER UNSIGNED  NOT NULL  ,
+  identificacion INTEGER UNSIGNED  NOT NULL   AUTO_INCREMENT,
   nombre VARCHAR(40)  NOT NULL  ,
   celular VARCHAR(10)  NOT NULL    ,
 PRIMARY KEY(identificacion));
@@ -55,7 +55,7 @@ INDEX Venta_FKIndex2(idUsuario),
       ON DELETE RESTRICT
       ON UPDATE CASCADE,
   FOREIGN KEY(idUsuario)
-    REFERENCES Usuarios(idUsuario)
+    REFERENCES Usuario(idUsuario)
       ON DELETE RESTRICT
       ON UPDATE CASCADE);
 
@@ -64,6 +64,7 @@ INDEX Venta_FKIndex2(idUsuario),
 CREATE TABLE ProductosVentas (
   idProducto INTEGER UNSIGNED  NOT NULL  ,
   idVenta INTEGER UNSIGNED  NOT NULL  ,
+  cantidad INTEGER UNSIGNED  NOT NULL  ,
   descuento DOUBLE  NOT NULL    ,
 PRIMARY KEY(idProducto, idVenta)  ,
 INDEX Producto_has_Venta_FKIndex1(idProducto)  ,
@@ -99,7 +100,7 @@ INSERT INTO Producto (tipo, referencia, cantidad, costo, precio) VALUES
 ('Electrónica', 'Laptop HP', 30, 600.00, 800.00),
 ('Mueble', 'Sofá de tres puestos', 8, 400.00, 600.00);
 
-INSERT INTO Usuarios (usuario, contraseña) VALUES 
+INSERT INTO Usuario (usuario, contraseña) VALUES 
 ('admin', 'admin123'),
 ('sebas12', 'herazo17'),
 ('empleado2', 'pass456'),
@@ -114,19 +115,19 @@ INSERT INTO Egresos (descripcion, fecha, valor) VALUES
 ('Mantenimiento de local', '2024-04-01', 300.00);
 
 INSERT INTO Cliente (identificacion, nombre, celular) VALUES 
-(1001, 'Juan Pérez', '3123456789'),
-(1002, 'María Gómez', '3219876543'),
-(1003, 'Carlos Ramírez', '3001234567'),
-(1004, 'Laura Martínez', '3109876543'),
-(1005, 'Luis Rodríguez', '3158765432');
+('Juan Pérez', '3123456789'),
+('María Gómez', '3219876543'),
+('Carlos Ramírez', '3001234567'),
+('Laura Martínez', '3109876543'),
+('Luis Rodríguez', '3158765432');
 
 
 INSERT INTO Venta (identificacion, idUsuario, tipoPago, fecha, totalPagar, totalPagado) VALUES 
-(1001, 1, 'Efectivo', '2024-04-10', 800.00, 800.00),
-(1002, 2, 'Tarjeta de crédito', '2024-04-09', 1200.00, 1200.00),
-(1003, 3, 'Efectivo', '2024-04-08', 1500.00, 1500.00),
-(1004, 4, 'Transferencia bancaria', '2024-04-07', 2000.00, 2000.00),
-(1005, 5, 'Efectivo', '2024-04-06', 1000.00, 1000.00);
+(1, 1, 'De contado', '2024-04-10', 800.00, 800.00),
+(2, 1, 'fiado', '2024-04-09', 1200.00, 1200.00),
+(3, 1, 'fiado', '2024-04-08', 1500.00, 1500.00),
+(4, 1, 'De contado', '2024-04-07', 2000.00, 2000.00),
+(5, 1, 'De contado', '2024-04-06', 1000.00, 1000.00);
 
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'qwe.123';
