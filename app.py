@@ -57,6 +57,10 @@ def eliminar_productos(idProducto):
 def ventas():
     return controllerVenta.ventas()
 
+@app.route('/venta-nueva')
+def nuevaVenta():
+    return controllerVenta.nuevaVenta()
+
 @app.route('/cliente', methods=['POST'])
 def cliente():
     return controllerVenta.registraCliente()
