@@ -8,6 +8,7 @@ Base = declarative_base()
 # Definir la clase Producto que representa la tabla de productos en la base de datos
 class Producto(Base):
     __tablename__ = 'Producto'
+    __tablename__ = 'Producto'
 
     idProducto = Column(Integer, primary_key=True)
     tipo = Column(String)
@@ -17,6 +18,7 @@ class Producto(Base):
     precio = Column(Double)
 
 class Usuario(Base):
+    __tablename__ = 'Usuario'
     __tablename__ = 'Usuario'
 
     idUsuario = Column(Integer, primary_key=True)
@@ -64,3 +66,5 @@ engine = create_engine('mysql://root:@localhost/tienda')
 # Crear una sesión para interactuar con la base de datos
 Session = sessionmaker(bind=engine)
 session = Session()
+
+

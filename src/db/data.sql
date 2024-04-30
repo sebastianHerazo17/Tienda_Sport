@@ -37,29 +37,23 @@ CREATE TABLE Cliente (
   celular VARCHAR(10)  NOT NULL    ,
 PRIMARY KEY(identificacion));
 
+INSERT INTO Cliente(identificacion, nombre, celular) VALUES (0, 'Seleccionar Cliente', ' ');
 
 
 CREATE TABLE Venta (
   idVenta INTEGER UNSIGNED  NOT NULL   AUTO_INCREMENT,
   identificacion INTEGER UNSIGNED  NOT NULL  ,
-  idUsuario INTEGER UNSIGNED  NOT NULL  ,
   tipoPago VARCHAR(20)  NOT NULL  ,
   fecha DATE  NOT NULL  ,
   totalPagar DOUBLE  NOT NULL  ,
   totalPagado DOUBLE  NOT NULL    ,
 PRIMARY KEY(idVenta)  ,
 INDEX Venta_FKIndex1(identificacion)  ,
-INDEX Venta_FKIndex2(idUsuario),
   FOREIGN KEY(identificacion)
     REFERENCES Cliente(identificacion)
       ON DELETE RESTRICT
-      ON UPDATE CASCADE,
-  FOREIGN KEY(idUsuario)
-    REFERENCES Usuario(idUsuario)
-      ON DELETE RESTRICT
       ON UPDATE CASCADE);
-
-
+      
 
 CREATE TABLE ProductosVentas (
   idProducto INTEGER UNSIGNED  NOT NULL  ,
@@ -92,42 +86,18 @@ INDEX Abonos_FKIndex2(idVenta),
       ON DELETE RESTRICT
       ON UPDATE CASCADE);
 
+-- select * from Producto;
+-- DELETE FROM Producto WHERE idProducto IN (1, 2, 3, 4, 5, 6);
 
-INSERT INTO Producto (tipo, referencia, cantidad, costo, precio) VALUES 
-('Electrodoméstico', 'Lavadora LG', 10, 500.00, 700.00),
-('Electrónica', 'Smartphone Samsung', 20, 300.00, 400.00),
-('Electrodoméstico', 'Refrigerador Whirlpool', 15, 800.00, 1000.00),
-('Electrónica', 'Laptop HP', 30, 600.00, 800.00),
-('Mueble', 'Sofá de tres puestos', 8, 400.00, 600.00);
+
 
 INSERT INTO Usuario (usuario, contraseña) VALUES 
 ('admin', 'admin123'),
-('sebas12', 'herazo17'),
-('empleado2', 'pass456'),
-('empleado3', 'pass789'),
-('gerente', 'gerente123');
-
-INSERT INTO Egresos (descripcion, fecha, valor) VALUES 
-('Pago de servicios', '2024-04-10', 500.00),
-('Compra de inventario', '2024-04-08', 1000.00),
-('Pago de nómina', '2024-04-05', 1500.00),
-('Gastos administrativos', '2024-04-03', 700.00),
-('Mantenimiento de local', '2024-04-01', 300.00);
-
-INSERT INTO Cliente (identificacion, nombre, celular) VALUES 
-('Juan Pérez', '3123456789'),
-('María Gómez', '3219876543'),
-('Carlos Ramírez', '3001234567'),
-('Laura Martínez', '3109876543'),
-('Luis Rodríguez', '3158765432');
+('sebas12', 'herazo17');
 
 
-INSERT INTO Venta (identificacion, idUsuario, tipoPago, fecha, totalPagar, totalPagado) VALUES 
-(1, 1, 'De contado', '2024-04-10', 800.00, 800.00),
-(2, 1, 'fiado', '2024-04-09', 1200.00, 1200.00),
-(3, 1, 'fiado', '2024-04-08', 1500.00, 1500.00),
-(4, 1, 'De contado', '2024-04-07', 2000.00, 2000.00),
-(5, 1, 'De contado', '2024-04-06', 1000.00, 1000.00);
-
+select * FROM ProductosVentas;
+select * from Venta;
+select * from Producto;
 
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'qwe.123';
