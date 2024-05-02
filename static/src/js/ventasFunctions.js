@@ -120,7 +120,7 @@ function listarCarrito() {
             </td>
             <td class="px-6 py-2"></td>
         </tr>
-        <tr class="bg-white ">
+        <tr class="bg-white border-t">
             <td class="px-6 py-2"></td>
             <td class="px-6 py-2"></td>
             <td class="px-2 py-2 text-right font-semibold text-gray-900 ">
@@ -195,7 +195,7 @@ function ocultarFilas(){
 function listarClientes() {
     selectCli.innerHTML = '';
     clientes.forEach(c => {
-        selectCli.innerHTML += `
+        if(c.identificacion != 2) selectCli.innerHTML += `
             <option value="${c.identificacion}">${c.nombre}  ${c.celular}</option>
         `;
     })

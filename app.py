@@ -1,5 +1,5 @@
 from flask import Flask
-from src.controllers import controller, controllerVenta
+from src.controllers import controller, controllerVenta, controllerCliente
 from src.models.model import *
 
 
@@ -25,7 +25,7 @@ def index():
 # RUTAS PARA LOS PRODUCTOS
 @app.route('/productos')
 def productos():
-    return controller.productos()
+    return controller.productos("")
 
 def formatear_moneda(valor):
     formato = "{:,.0f}".format(valor)
@@ -37,6 +37,8 @@ def formatear_moneda(valor):
 def moneda_colombiana_filter(valor):
     return formatear_moneda(valor)
 
+
+# RUTAS DE PRODUCTOS
 @app.route('/registrar_productos', methods=['POST'])
 def registrar_productos():
     return controller.registrar_productos()
@@ -68,6 +70,14 @@ def cliente():
 @app.route('/registra_venta', methods=['POST'])
 def registraVenta():
     return controllerVenta.registrarVenta()
+
+# RUTAS DE CLIENTES
+@app.route('/clientes')
+def clientes():
+    return controllerCliente.listarCliente()
+@app.route('/eliminar_cliente/<id>')
+def eliminarCliente(id):
+    return controllerCliente.eliminar_cliente(id)
 
 if __name__ == '__main__':
     app.run(debug=True)

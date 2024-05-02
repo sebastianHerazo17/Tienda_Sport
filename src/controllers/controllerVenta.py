@@ -1,6 +1,6 @@
-from flask import  Flask, render_template, request, redirect, url_for, jsonify
-from flask import session
-from src.models.model import *
+from flask import render_template, request, redirect, jsonify
+from sqlalchemy import desc
+from src.models.model import Venta, Producto, ProductosVentas, Cliente, session
 import datetime
 
 def queryCliente():
@@ -30,7 +30,7 @@ def queryProducto():
     return json_productos
 
 def ventas():
-    ventas = session.query(Venta).all()
+    ventas = session.query(Venta).order_by(desc(Venta.idVenta)).all()
     listaCli = session.query(Cliente).all()
     nombres = {}
     for venta in ventas:
