@@ -22,26 +22,9 @@
                             <div class="bg-white dark:bg-gray-900">
                                 <div class="relative mt-1 flex items-center gap-4 justify-center">
                                     <div class="flex flex-col text-gray-900 dark:text-white">
-                                            <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Buscar tipo:</label>
-                                            <select id="tipo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                <option value="Camiseta">Camiseta</option>
-                                                <option value="Camisa">Camisa</option>
-                                                <option value="Jeans Hombre">Jeans Hombre</option>
-                                                <option value="Jeans Mujer">Jeans Mujer</option>
-                                                <option value="Blusa">Blusa</option>
-                                                <option value="Boxer">Boxer</option>
-                                                <option value="Sandalias">Sandalias</option>
-                                            </select>
-                                        </div>
-                                        <div class="flex flex-col text-gray-900 dark:text-white">
-                                            <label for="referencia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Buscar referencia:</label>
-                                            <select id="referencia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                <option value="1.1">1.1</option>
-                                                <option value="Importado">Importado</option>
-                                                <option class="AAA">AAA</option>
-                                                <option class="Nacional">Nacional</option>
-                                            </select>
-                                        </div>
+                                        <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Buscar:</label>
+                                        <input id="searchInput" oninput="buscar('tableVentas','searchInput')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    </div>
                                 </div>
                             </div>
                             <a href="/venta-nueva" class="flex items-center gap-1 px-3 justify-center text-indigo-800 hover:text-indigo-600 bg-indigo-50 hover:bg-indigo-200 focus:ring-2 focus:ring-indigo-300 font-medium rounded-lg text-sm p-2">
@@ -52,9 +35,12 @@
                             </a>
                         </div>
                         <div class="shadow-md rounded-md">
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                        <table id="tableVentas" class="w-full text-sm text-left rtl:text-right ">
+                            <thead class="text-xs text-center text-gray-800 uppercase bg-gray-200">
                                 <tr>
+                                    <th>
+                                        ID VENTA
+                                    </th>
                                     <th scope="col" class="px-6 py-3">
                                         CLIENTE
                                     </th>
@@ -77,24 +63,65 @@
                             </thead>
                             <tbody>
                                 {% for venta in ventas %}
-                                <tr class="bg-white border-b">
-                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                                {% if venta.tipoPago == "Fiado" and venta.totalPagado<venta.totalPagar %}
+                                <tr class="border-b bg-red-100">
+                                {% elif venta.tipoPago  == "De contado" or venta.totalPagado>=venta.totalPagar %}
+                                <tr class="border-b bg-gray-50">
+                                {% endif %}
+                                <td class="px-6 py4 text-center font-semibold">
+                                    TS00{{ venta.idVenta }}
+                                </td>
+                                    <td class="px-6 py-4 text-gray-900 whitespace-nowrap ">
                                        {{ nombres[venta.identificacion] }}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 font-semibold text-gray-900">
                                         {{ venta.tipoPago }}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 text-center">
                                         {{ venta.fecha }}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 text-right">
                                        {{ venta.totalPagar | moneda }}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 text-right">
                                         {{ venta.totalPagado | moneda }}
                                     </td>
                                     <td class="px-6 py-4">
-
+                                        {% if venta.tipoPago == "Fiado" and venta.totalPagado<venta.totalPagar %}
+                                        <div class="flex justify-end">
+                                            <button id="dropdownButton-{{ venta.idVenta }}"  data-dropdown-toggle="dropdown-{{ venta.idVenta }}" data-dropdown-placement="left-start" class="flex gap-1 items-center justify-center inline-block text-green-800 bg-green-100 hover:bg-green-200 focus:bg-green-200 focus:ring-4 focus:outline-none focus:ring-green-200 rounded-lg text-sm p-1.5" type="button">
+                                                <svg class="w-4 h-4 text-green-800 bold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"/>
+                                                  </svg>
+                                                  <label for="abono-{{venta.idVenta}}" class="text-green-800 bold" style="cursor: pointer;">ABONO</label>
+                                            </button>
+                                            <!-- Dropdown menu -->
+                                            <div id="dropdown-{{ venta.idVenta }}" class="z-10 hidden text-base list-none bg-gray-50 rounded-lg shadow">
+                                                <div class="p-2">
+                                                    <span class="p-2">{{ nombres[venta.identificacion] }} debe: <strong>{{ (venta.totalPagar - venta.totalPagado) | moneda}}</strong></span>
+                                                    <div class="relative">
+                                                      <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                        <svg class="w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                            <path fill-rule="evenodd" d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z" clip-rule="evenodd"/>
+                                                            <path fill-rule="evenodd" d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" clip-rule="evenodd"/>
+                                                            <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>
+                                                          </svg>                                                          
+                                                      </div>
+                                                      <input type="text" id="abono-{{venta.idVenta}}" oninput="formatoMoneda(event)" onblur="formatoMoneda(event)" class="block w-full p-2 ps-10 text-sm text-gray-900 border-gray-300 rounded-lg bg-white" placeholder="$ 0">
+                                                    </div>
+                                                  </div>
+                                                  <div class="p-2">
+                                                    <div class="relative">
+                                                        <button onclick="registroAbono({{venta.idVenta}}, {{(venta.totalPagar - venta.totalPagado)}})" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                                                            <span class="relative px-5 py-1.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                                                                REGISTRAR
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                  </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -107,5 +134,10 @@
         </div>
         {% include 'footer.html' %}
     </div>
+    <script src="{{url_for('static',filename='src/js/axios.min.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/flowbite.min.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/formatoMoneda.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/abonos.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/tables.js')}}"></script>
 </body>
 </html>

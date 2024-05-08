@@ -130,7 +130,11 @@ def modificar_productos(idProducto):
     return redirect(url_for('productos'))
 
 def eliminar_productos(idProducto):
-    producto = session.query(Producto).get(idProducto)
-    session.delete(producto)
-    session.commit()
-    return redirect(url_for('productos'))
+    productos_ventas = session.query(ProductosVentas).filter_by(idProducto=idProducto).all()
+    if(len(productos_ventas)==0): 
+        producto = session.query(Producto).get(idProducto)
+        session.delete(producto)
+        session.commit()
+        return productos("eliminado")
+    else:
+        return productos("imposible")

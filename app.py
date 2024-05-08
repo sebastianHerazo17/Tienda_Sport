@@ -1,5 +1,5 @@
 from flask import Flask
-from src.controllers import controller, controllerVenta
+from src.controllers import controller, controllerVenta, controllerCliente
 from src.models.model import *
 
 
@@ -23,7 +23,7 @@ def index():
     return controller.index()
 
 # RUTAS PARA LOS PRODUCTOS
-@app.route('/productos')
+@app.route('/productos', methods=['GET', 'POST'])
 def productos():
     return controller.productos()
 
@@ -61,13 +61,32 @@ def ventas():
 def nuevaVenta():
     return controllerVenta.nuevaVenta()
 
-@app.route('/cliente', methods=['POST'])
-def cliente():
-    return controllerVenta.registraCliente()
 
 @app.route('/registra_venta', methods=['POST'])
 def registraVenta():
     return controllerVenta.registrarVenta()
+
+# RUTAS DE CLIENTES
+@app.route('/clientes')
+def clientes():
+    return controllerCliente.listarCliente()
+
+@app.route('/cliente', methods=['POST'])
+def registraCliente():
+    return controllerVenta.registraCliente()
+
+@app.route('/eliminar_cliente/<id>')
+def eliminarCliente(id):
+    return controllerCliente.eliminar_cliente(id)
+
+@app.route('/modificar_cliente/<id>', methods=['POST'])
+def modificarCliente(id):
+    return controllerCliente.modificar_cliente(id)
+
+# RUTA PARA ABONOS
+@app.route('/abono', methods=['POST'])
+def abono():
+    return controllerVenta.registroAbono()
 
 if __name__ == '__main__':
     app.run(debug=True)

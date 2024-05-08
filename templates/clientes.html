@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Sport</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/flowbite.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/sweetalert2.min.css')}}">
+    <script src="{{url_for('static',filename='src/js/sweetalert2.all.min.js')}}"></script>
+</head>
+<body>
+    
+    {% include 'menu.html' %}
+    
+    <div class="p-4 sm:ml-64 h-screen">
+        <div class="p-4 rounded-lg">
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+                    <h2 class="max-w-lg text-3x1 font-semibold leading-normal text-gray-900 ">CLIENTES REGISTRADOS</h2>
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="bg-gray-200 border-b hover:bg-gray-200 ">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    ID
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    NOMBRE
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    TELEFONO
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cliente in clientes %}
+                                {% if cliente.identificacion > 2  %}
+                                    <tr class="bg-gray-50 border-b hover:bg-gray-100">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ cliente.identificacion }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ cliente.nombre }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ cliente.celular }}
+                                        </td>
+                                        <td>
+                                            <!-- BOTON EDITAR -->
+                                            <button id="modClienteBtn-{{cliente.identificacion}}"  data-dropdown-toggle="modCliente-{{cliente.identificacion}}" data-dropdown-placement="right-start" type="button" class="focus:outline-none bg-indigo-50 hover:bg-indigo-200 focus:ring-2 focus:ring-indigo-300 font-medium rounded-lg text-sm p-2">
+                                                <svg class="w-5 h-5 text-indigo-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path fill-rule="evenodd" d="M9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H7Zm8-1a1 1 0 0 1 1-1h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 0 1-1-1Z" clip-rule="evenodd"/>
+                                                </svg>
+                                            </button>
+                                            <div id="modCliente-{{cliente.identificacion}}"  class="flex flex-col p-3 z-10 hidden text-base list-none bg-indigo-100 rounded-lg shadow-md items-center justify-center">
+                                                <div class="transition-all ease-in duration-75 mt-3 mb-3 flex items-center gap-4 justify-center">
+                                                    <div class="flex flex-col">
+                                                        <label for="nombreCli-{{cliente.identificacion}}" class="block mb-2 text-sm font-medium">Nombre del cliente:</label>
+                                                        <input type="text" id="nombreCli-{{cliente.identificacion}}" value="{{cliente.nombre}}" class="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nombre del cliente" required />
+                                                    </div>
+                                                    <div class="flex flex-col">
+                                                        <label for="numeroCli-{{cliente.identificacion}}" class="block mb-2 text-sm font-medium ">Celular del cliente:</label>
+                                                        <input type="text" id="numeroCli-{{cliente.identificacion}}" value="{{cliente.celular}}" data-input-counter maxlength="10" class=" border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Celular del cliente" required />
+                                                    </div>
+                                                </div>
+                                                <div class=" relative mx-auto w-full flex flex-col justify-center inline-flex  items-center">
+                                                    <button onclick="modificarCliente({{cliente.identificacion}})" class="relative inline-flex items-center mt-2 justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white  focus:ring-4 focus:outline-none focus:ring-green-200">
+                                                        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0">
+                                                            MODIFICAR
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <!-- BOTON ELIMINAR -->
+                                            <button type="button" onclick="eliminarCliente({{ cliente.identificacion }})" class="focus:outline-none bg-red-100 hover:bg-red-300 focus:ring-2 focus:ring-red-300 font-medium rounded-lg text-sm p-2">
+                                                <svg class="w-5 h-5 text-red-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                </svg>
+                                            </button>
+                                            
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            {% if size == 2 %}
+                            <tr>
+                                <td></td>
+                                <td>No hay clientes registrados</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% include 'footer.html' %}
+    </div>
+    <script src="{{url_for('static',filename='src/js/axios.min.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/flowbite.min.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/clientesFunction.js')}}"></script>
+</body>
+</html>
