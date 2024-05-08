@@ -8,7 +8,7 @@
       {
         "list": "off"
       }
-    ], 
+    ],
     "meta-viewport": "off",
     "axe/language": [
       "default",
@@ -23,7 +23,8 @@
       {
         "ignore": [
           "-webkit-text-size-adjust",
-          "-webkit-tap-highlight-color"
+          "-webkit-tap-highlight-color",
+          "-moz-appearance"
         ]
       }
     ],

@@ -137,4 +137,3 @@ def eliminar_productos(idProducto):
         return productos("eliminado")
     else:
         return productos("imposible")
-        

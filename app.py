@@ -23,7 +23,7 @@ def index():
     return controller.index()
 
 # RUTAS PARA LOS PRODUCTOS
-@app.route('/productos')
+@app.route('/productos', methods=['GET', 'POST'])
 def productos():
     return controller.productos("")
 
@@ -63,9 +63,6 @@ def ventas():
 def nuevaVenta():
     return controllerVenta.nuevaVenta()
 
-@app.route('/cliente', methods=['POST'])
-def cliente():
-    return controllerVenta.registraCliente()
 
 @app.route('/registra_venta', methods=['POST'])
 def registraVenta():
@@ -75,6 +72,10 @@ def registraVenta():
 @app.route('/clientes')
 def clientes():
     return controllerCliente.listarCliente()
+
+@app.route('/cliente', methods=['POST'])
+def registraCliente():
+    return controllerVenta.registraCliente()
 
 @app.route('/eliminar_cliente/<id>')
 def eliminarCliente(id):

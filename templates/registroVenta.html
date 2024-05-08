@@ -18,35 +18,20 @@
                 <div class="flex items-center w-full h-full justify-start flex-col p-1 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 sm:p-1">
                     <h2 class="max-w-lg text-2xl text-center font-semibold leading-normal text-gray-900">LISTA DE PRODUCTOS</h2>
                     <div class="flex flex-wrap items-start w-full my-4 gap-6 items-end">
-                        <div class="bg-white mx-4 ">
-                            <div class="relative mt-1 flex items-center gap-4 justify-start">
-                                <div class="flex flex-col text-gray-900 ">
-                                        <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 ">Buscar tipo:</label>
-                                        <select id="tipo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                            <option value="Camiseta">Camiseta</option>
-                                            <option value="Camisa">Camisa</option>
-                                            <option value="Jeans Hombre">Jeans Hombre</option>
-                                            <option value="Jeans Mujer">Jeans Mujer</option>
-                                            <option value="Blusa">Blusa</option>
-                                            <option value="Boxer">Boxer</option>
-                                            <option value="Sandalias">Sandalias</option>
-                                        </select>
+                        <div class="flex flex-wrap w-full p-4 gap-6 items-end">
+                            <div class="bg-white dark:bg-gray-900">
+                                <div class="relative mt-1 flex items-center gap-4 justify-center">
+                                    <div class="flex flex-col text-gray-900 dark:text-white">
+                                        <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Buscar:</label>
+                                        <input id="searchInput" oninput="buscar('tableProducts','searchInput')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     </div>
-                                    <div class="flex flex-col text-gray-900 ">
-                                        <label for="referencia" class="block mb-2 text-sm font-medium text-gray-900 ">Buscar referencia:</label>
-                                        <select id="referencia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                            <option value="1.1">1.1</option>
-                                            <option value="Importado">Importado</option>
-                                            <option class="AAA">AAA</option>
-                                            <option class="Nacional">Nacional</option>
-                                        </select>
-                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="relative overflow-x-auto shadow-md w-full text-center sm:rounded-lg">
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg rounded">
-                            <table class="w-full text-sm text-center shadow-md rtl:text-right text-gray-500 ">
+                            <table id="tableProducts" class="w-full text-sm text-center shadow-md rtl:text-right text-gray-500 ">
                                 <thead class="w-full text-xs text-gray-700 text-center uppercase bg-gray-50  ">
                                     <tr>
                                         <th scope="col" class="px-6 py-3">
@@ -180,6 +165,6 @@
     <script src="{{url_for('static',filename='src/js/inputs.js')}}"></script>
     <script src="{{url_for('static',filename='src/js/ventasFunctions.js')}}"></script>
     <script src="{{url_for('static',filename='src/js/formatoMoneda.js')}}"></script>
-    
+    <script src="{{url_for('static',filename='src/js/tables.js')}}"></script>
 </body>
 </html>

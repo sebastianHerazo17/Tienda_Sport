@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, jsonify, url_for
 from sqlalchemy import desc
 from src.models.model import Venta, Producto, ProductosVentas, Cliente, Abono, session
 import datetime
+from src.controllers.controller import obj
 
 def queryCliente():
     clientes = session.query(Cliente).all()
@@ -30,27 +31,33 @@ def queryProducto():
     return json_productos
 
 def ventas():
-    ventas = session.query(Venta).order_by(desc(Venta.idVenta)).all()
-    listaCli = session.query(Cliente).all()
-    nombres = {}
-    for venta in ventas:
-        nombre = ""
-        if(venta.identificacion == 1):
-            nombre = "Venta en caja"
-        else:
-            for cli in listaCli:
-                if(venta.identificacion == cli.identificacion):
-                    nombre = cli.nombre
-        nombres[venta.identificacion] = nombre
+    if obj.get_boolean() is True:
+        ventas = session.query(Venta).all()
+        listaCli = session.query(Cliente).all()
+        nombres = {}
+        for venta in ventas:
+            nombre = ""
+            if(venta.identificacion == 1):
+                nombre = "Venta en caja"
+            else:
+                for cli in listaCli:
+                    if(venta.identificacion == cli.identificacion):
+                        nombre = cli.nombre
+            nombres[venta.identificacion] = nombre
 
-    
-    return render_template('ventas.html', ventas=ventas, nombres=nombres)
+        
+        return render_template('ventas.html', ventas=ventas, nombres=nombres)
+    else:
+        return redirect(url_for('login'))
 
 def nuevaVenta():
-    productos = queryProducto()
-    clientes = queryCliente()
-    return render_template('registroVenta.html',  productos=productos, clientes=clientes)
-
+    if obj.get_boolean() is True:
+        productos = queryProducto()
+        clientes = queryCliente()
+        return render_template('registroVenta.html',  productos=productos, clientes=clientes)
+    else:
+        return redirect(url_for('login'))
+    
 def registraCliente():
     datos = request.get_json()
     # Procesar datos
@@ -134,7 +141,7 @@ def registrarVenta():
         return jsonify("vacio")
     
 
-# REGISTRO DE ABONO
+    # REGISTRO DE ABONO
 
 def registroAbono():
     datos = request.get_json()
