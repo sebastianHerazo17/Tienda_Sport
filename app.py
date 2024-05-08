@@ -75,9 +75,19 @@ def registraVenta():
 @app.route('/clientes')
 def clientes():
     return controllerCliente.listarCliente()
+
 @app.route('/eliminar_cliente/<id>')
 def eliminarCliente(id):
     return controllerCliente.eliminar_cliente(id)
+
+@app.route('/modificar_cliente/<id>', methods=['POST'])
+def modificarCliente(id):
+    return controllerCliente.modificar_cliente(id)
+
+# RUTA PARA ABONOS
+@app.route('/abono', methods=['POST'])
+def abono():
+    return controllerVenta.registroAbono()
 
 if __name__ == '__main__':
     app.run(debug=True)

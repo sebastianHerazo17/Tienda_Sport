@@ -1,6 +1,6 @@
-from flask import render_template, request, redirect, jsonify
+from flask import render_template, request, redirect, jsonify, url_for
 from sqlalchemy import desc
-from src.models.model import Venta, Producto, ProductosVentas, Cliente, session
+from src.models.model import Venta, Producto, ProductosVentas, Cliente, Abono, session
 import datetime
 
 def queryCliente():
@@ -115,19 +115,40 @@ def registrarVenta():
     carrito = datos.get('carrito')
     for p in carrito:
         totalPagar += (p['precio']*p['orden']) - p['descuento']
-   
-    if (tipoPago == "De contado"):
-        if (totalPagado >= totalPagar):
-            registroVenta(datos=datos)
-            return jsonify("correct")
+    if len(carrito) > 0:
+        if (tipoPago == "De contado"):
+            if (totalPagado >= totalPagar):
+                registroVenta(datos=datos)
+                return jsonify("correct")
+            else:
+                return jsonify("pagoCero")
+        elif (tipoPago == "Fiado"):
+            if (identificacion > 1):
+                registroVenta(datos=datos)
+                return jsonify("correct")
+            else:
+                return jsonify("clienteInvalido")
         else:
-            return jsonify("pagoCero")
-    elif (tipoPago == "Fiado"):
-        if (identificacion > 1):
-            registroVenta(datos=datos)
-            return jsonify("correct")
-        else:
-            return jsonify("clienteInvalido")
+            return jsonify("TipoPagoInvalido")
     else:
-        return jsonify("TipoPagoInvalido")
+        return jsonify("vacio")
     
+
+# REGISTRO DE ABONO
+
+def registroAbono():
+    datos = request.get_json()
+    idVenta = datos.get('idVenta')
+    hoy = datetime.date.today()
+    fecha =  hoy.strftime('%Y-%m-%d')
+    valor = datos.get('valor')
+
+    nuevoAbono = Abono(idVenta=idVenta, fecha=fecha, valor=valor)
+    session.add(nuevoAbono)
+    session.commit()
+
+    venta = session.query(Venta).get(idVenta)
+    venta.totalPagado += valor
+    session.commit()
+
+    return jsonify('registrado')

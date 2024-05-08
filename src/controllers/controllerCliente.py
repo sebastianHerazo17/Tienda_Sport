@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request, jsonify
 from sqlalchemy import desc
 from src.models.model import Cliente, Venta, session
 
@@ -19,3 +19,14 @@ def eliminar_cliente(id):
     session.delete(cliente)
     session.commit()
     return redirect(url_for('clientes'))
+
+def modificar_cliente(id):
+    datos = request.get_json()
+    nombre = datos.get("nombre")
+    celular = datos.get("celular")
+
+    cliente = session.query(Cliente).get(id)
+    cliente.nombre = nombre
+    cliente.celular = celular
+    session.commit()
+    return jsonify('mod')

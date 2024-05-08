@@ -206,11 +206,12 @@ function listarClientes() {
 const tipoVenta = document.getElementById('tipoVenta');
 
  function enviarVenta() {
+    let  pago = ingresoPago() > total() ? total() : ingresoPago();
     let venta = {
       identificacion: selectCli.value,
       tipoPago: tipoVenta.value,
       totalPagar: total(),
-      totalPagado:ingresoPago(),
+      totalPagado:pago,
       carrito: carrito
     }
 
@@ -231,7 +232,8 @@ const tipoVenta = document.getElementById('tipoVenta');
                     setTimeout(() => {
                         location.href = "/ventas";
                     }, 1000);
-                } 
+                }
+                else if (resp === "vacio") Swal.fire("CARRITO VACIO", "El carrito no puede estar vacio.", "info");
                 else if (resp === "pagoCero") Swal.fire("Ocurrió un error", "Se debe ingresar el valor total de pago si es de contado.", "error");
                 else if (resp === "TipoPagoInvalido") Swal.fire("Ocurrió un error", "El tipo de pago no es valido.", "error");
                 else if (resp === "clienteInvalido") Swal.fire("Ocurrió un error", "Debe seleccionar un cliente para poder Fiar.", "error");
