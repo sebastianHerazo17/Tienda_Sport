@@ -51,16 +51,57 @@ def logout():
     obj.set_boolean(False)
     return redirect(url_for('login'))
 
+def finanzas(fechaIni, fechaFin, agrupar_por):
+    
+    if agrupar_por == 'semana':
+        # Agrupar por semana (incluyendo el año para identificación única)
+        fecha_agrupada = (
+            func.concat(func.year(Venta.fecha), '-', func.week(Venta.fecha))
+        )
+        formato = '%Y-%W'
+    elif agrupar_por == 'mes':
+        fecha_agrupada = func.date_format(Venta.fecha, '%Y-%m')
+        formato = '%Y-%m' 
+    elif agrupar_por == 'anio':
+        fecha_agrupada = func.date_format(Venta.fecha, '%Y')
+        formato = '%Y'  
+    else:
+        fecha_agrupada = func.date_format(Venta.fecha, '%Y-%m-%d')
+        formato = '%Y-%m-%d' 
+    
+    total_ingresos = session.query(func.sum(Venta.totalPagado)).filter(Venta.fecha >= fechaIni, Venta.fecha <= fechaFin).scalar() or 0
+    total_egresos = 100000
+    informePagos = (
+        session.query(fecha_agrupada, func.sum(Venta.totalPagado))
+        .filter(Venta.fecha >= fechaIni, Venta.fecha <= fechaFin)
+        .group_by(fecha_agrupada)
+        .all()
+    )
+    informeConteo = (
+        session.query(fecha_agrupada, func.count(Venta.fecha))
+        .filter(Venta.fecha >= fechaIni, Venta.fecha <= fechaFin)
+        .group_by(fecha_agrupada)
+        .all()
+    )
+
+    informeP = [{"fecha": info[0],"total": info[1],} for info in informePagos]
+    informeC = [{"fecha": info[0],"total": info[1],} for info in informeConteo]
+
+    return jsonify({
+        "ingresos": total_ingresos,
+        "egresos": total_egresos,
+        "ganancias": (total_ingresos - total_egresos),
+        "informePagos": informeP,
+        "informeConteo": informeC
+    })
+
 def index():
     #Cual es la fecha de hace 20 días
     fecha20 = datetime.now() - timedelta(days=20)
     #comparar las fechas y el tipo de venta
-    ventas_fiadas = session.query(Venta).filter(Venta.fecha <= fecha20, Venta.tipoPago == 'Fiado').all()
-
+    ventas_fiadas = session.query(Venta).filter(Venta.fecha <= fecha20, Venta.tipoPago == 'Fiado', Venta.totalPagado<Venta.totalPagar).all()
     ids_clientes_con_deuda = [venta.identificacion for venta in ventas_fiadas]
-
     clientes_con_deuda = session.query(Cliente).filter(Cliente.identificacion.in_(ids_clientes_con_deuda)).all()
-
     productos_bajo_stock = session.query(Producto).filter(Producto.cantidad <= 10).all()
 
     deuda_clientes = {}
@@ -72,7 +113,10 @@ def index():
         deuda_clientes[cliente.identificacion] = deuda
 
     if obj.get_boolean() is True:
-        return render_template('index.html',productos_bajo_stock=productos_bajo_stock, clientes_con_deuda=clientes_con_deuda, deuda_clientes=deuda_clientes)
+        return render_template('index.html',
+                               productos_bajo_stock=productos_bajo_stock, 
+                               clientes_con_deuda=clientes_con_deuda, 
+                               deuda_clientes=deuda_clientes)
     else: 
         return redirect(url_for('login'))
     

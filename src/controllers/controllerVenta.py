@@ -32,7 +32,7 @@ def queryProducto():
 
 def ventas():
     if obj.get_boolean() is True:
-        ventas = session.query(Venta).all()
+        ventas = session.query(Venta).order_by(desc(Venta.idVenta)).all()
         listaCli = session.query(Cliente).all()
         nombres = {}
         for venta in ventas:

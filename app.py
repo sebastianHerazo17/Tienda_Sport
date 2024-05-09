@@ -8,7 +8,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY']='security key momently'
 
 
-
 # RUTAS PARA INICIO DE SESIÓN
 @app.route('/')
 def inicio():
@@ -89,6 +88,11 @@ def modificarCliente(id):
 @app.route('/abono', methods=['POST'])
 def abono():
     return controllerVenta.registroAbono()
+
+# RUTAS EXTRA
+@app.route('/finanzas/<fi>/<ff>/<gb>')
+def finanza(fi, ff, gb):
+    return controller.finanzas(fi, ff, gb)
 
 if __name__ == '__main__':
     app.run(debug=True)

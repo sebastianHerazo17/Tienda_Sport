@@ -75,7 +75,7 @@ function accionCarrito(id, action) {
 
 function listarCarrito() {
     tabBody.innerHTML = '';
-    carrito.forEach((prod, i) => {
+    if(carrito.length>0) {carrito.forEach((prod, i) => {
         tabBody.innerHTML += `
         <tr class="bg-white">
             <td class="px-6 py-4 font-semibold text-gray-900 ">
@@ -147,6 +147,8 @@ function listarCarrito() {
             <td class="px-6 py-2"></td>
         </tr>
         `;
+    }
+    else tabBody.innerHTML = '<tr><td></td><td></td><td>Carrito está vacio</td><td></td><td></td></tr>';
 }
 
 function totalProductos() {

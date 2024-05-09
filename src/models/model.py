@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, Double, Date
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, Double, Date, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -7,6 +7,7 @@ Base = declarative_base()
 
 # Definir la clase Producto que representa la tabla de productos en la base de datos
 class Producto(Base):
+    __tablename__ = 'Producto'
     __tablename__ = 'Producto'
 
     idProducto = Column(Integer, primary_key=True)
@@ -17,6 +18,7 @@ class Producto(Base):
     precio = Column(Double)
 
 class Usuario(Base):
+    __tablename__ = 'Usuario'
     __tablename__ = 'Usuario'
 
     idUsuario = Column(Integer, primary_key=True)
@@ -33,7 +35,7 @@ class Cliente(Base):
 class Venta(Base):
     __tablename__ = 'Venta'
 
-    idVenta = Column(Integer, primary_key=True,  autoincrement=True)
+    idVenta = Column(Integer, primary_key=True)
     identificacion = Column(Integer)
     tipoPago = Column(String)
     fecha = Column(Date)
@@ -42,7 +44,7 @@ class Venta(Base):
 
 class ProductosVentas(Base):
     __tablename__ = 'ProductosVentas'
-
+     
     idProducto = Column(Integer, primary_key=True)
     idVenta = Column(Integer, primary_key=True)
     cantidad = Column(Integer)
@@ -56,9 +58,19 @@ class Abono(Base):
     fecha = Column(Date)
     valor = Column(Double)
 
+class Egresos(Base):
+    __tablename__= 'Egresos'
+
+    idEgresos = Column(Integer, primary_key=True)
+    descripcion = Column(String)
+    fecha = Column(Date)
+    valor = Column(Double)
+
 # Crear el motor de la base de datos (usando MySQL)
 engine = create_engine('mysql://root:qwe.123@localhost/tienda')
 
 # Crear una sesión para interactuar con la base de datos
 Session = sessionmaker(bind=engine)
 session = Session()
+
+

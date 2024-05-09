@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{url_for('static',filename='dist/css/sweetalert2.min.css')}}">
     <script src="{{url_for('static',filename='src/js/sweetalert2.all.min.js')}}"></script>
 </head>
-<body onload="fechaReloj()">
+<body>
     
     {% include 'menu.html' %}
     <script>
@@ -60,69 +60,45 @@
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                 </svg>
                             </div>
-                            <input type="date" name="fechaFin" id="fechaFin" max="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fin">
+                            <input type="date" name="fechaFin" id="fechaFin" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fin">
                         </div>
                     </div>
             </div>
         </div>
 
-        <div class="flex items-center justify-center h-48 mb-4 rounded bg-white dark:bg-gray-800">
+        <div class="flex items-center justify-center h-48 mb-2 rounded bg-white dark:bg-gray-800">
             <div class="flex items-center w-full justify-end gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8">
-                <div class="flex flex-col bg-yellow-50 p-8 rounded-full">
-                    <div class="mb-2 text-4xl text-yellow-300 text-right font-bold">$ 5.600.800,0</div>
-                    <div class="text-gray-500 text-yellow-300 text-right dark:text-gray-400 font-bold">Ingresos</div>
+                <div class="flex flex-col bg-indigo-50 p-8 rounded-full">
+                    <div class="mb-2 text-4xl text-indigo-400 text-right font-bold" id="ingresos"></div>
+                    <div class=" text-indigo-400 text-right font-bold">Ingresos</div>
                 </div>
                 <div class="flex flex-col bg-red-50 p-8 rounded-full">
-                    <div class="mb-2 text-4xl text-red-500 text-right text-red font-bold">$ 600.800,0</div>
-                    <div class="text-gray-500 text-red-500 text-right dark:text-gray-400 font-bold">Egresos</div>
+                    <div class="mb-2 text-4xl text-red-500 text-right text-red font-bold" id="egresos"></div>
+                    <div class="text-red-500 text-right font-bold">Egresos</div>
                 </div>
                 <div class="flex flex-col bg-green-50 p-8 rounded-full">
-                    <div class="mb-2 text-4xl text-green-500 text-right font-bold">$ 5.000.000,0</div>
-                    <div class="text-gray-500 text-green-500 text-right dark:text-gray-400 font-bold">Ganancias</div>
+                    <div class="mb-2 text-4xl text-green-500 text-right font-bold" id="ganancias"></div>
+                    <div class="text-green-500 text-right font-bold">Ganancias</div>
                 </div>
             </div>
         </div>
-
-        
+        <div class="flex flex-col items-start justify-center px-4 mb-4 rounded">
+            <label for="vistaGraf" class="block mb-2 text-sm font-medium text-gray-900">Selecciona filtro:</label>
+            <select name="vista" id="vistaGraf" class="bg-gray-50 border w-32 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                <option value="dia">Días</option>
+                <option value="semana">Semanas</option>
+                <option value="mes">Meses</option>
+                <option value="anio">Años</option>
+            </select>
+        </div>
         <div class="grid grid-cols-2 gap-4 mb-4">
-            <div class="flex flex-col items-center justify-center rounded">
-                <h2 class="max-w-lg text-3x1 font-semibold leading-normal text-gray-900 my-2">PRODUCTOS CON BAJA DISPONIBILIDAD</h2>
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="bg-red-200 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200 dark:hover:bg-gray-600">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                TIPO
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                REFERENCIA
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                CANTIDAD
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for producto in productos_bajo_stock %}
-                        <tr class="bg-red-50 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200 dark:hover:bg-gray-600">
-                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ producto.tipo }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ producto.referencia }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ producto.cantidad }}
-                            </td>
-                        </tr>
-                        {% endfor %}
-
-                    </tbody>
-                </table>
+            <div class="flex flex-col items-center justify-center p-2 overflow-x-auto rounded bg-gray-50 h-32 mb-4">
+                <canvas id="grafica"></canvas>
             </div>
-            <div class="flex items-center justify-center rounded bg-gray-50 h-32 dark:bg-gray-800">
-                
+            <div class="flex flex-col items-center justify-center p-2 overflow-x-auto rounded bg-gray-50 h-32 mb-4">
+                <canvas id="graficaCont"></canvas>
             </div>
-            <div class="flex flex-col items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+            <div class="flex flex-col items-center justify-center rounded h-28 dark:bg-gray-800">
                 <h2 class="max-w-lg text-3x1 font-semibold leading-normal text-gray-900 my-2">CLIENTES CON DEUDA MAYOR A 20 DIAS</h2>
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="bg-red-200 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200 dark:hover:bg-gray-600">
@@ -142,6 +118,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% if clientes_con_deuda %}
                         {% for cliente in clientes_con_deuda %}
                         <tr class="bg-red-100 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200">
                             <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -158,84 +135,65 @@
                             </td>
                         </tr>
                         {% endfor %}
-
+                        {% else %}
+                        <tr class="text-center">
+                            <td></td>
+                            <td>No hay clientes con 20 días de deudas</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                <p class="text-2xl text-gray-400 dark:text-gray-500">
-                    <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                    </svg>
-                </p>
-            </div>
-        </div>
-        <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-            <p class="text-2xl text-gray-400 dark:text-gray-500">
-                <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                </svg>
-            </p>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                <p class="text-2xl text-gray-400 dark:text-gray-500">
-                    <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                    </svg>
-                </p>
-            </div>
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                <p class="text-2xl text-gray-400 dark:text-gray-500">
-                    <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                    </svg>
-                </p>
-            </div>
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                <p class="text-2xl text-gray-400 dark:text-gray-500">
-                    <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                    </svg>
-                </p>
-            </div>
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                <p class="text-2xl text-gray-400 dark:text-gray-500">
-                    <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                    </svg>
-                </p>
+            <div class="flex flex-col items-center justify-start rounded">
+                <h2 class="max-w-lg text-3x1 font-semibold leading-normal text-gray-900 my-2">PRODUCTOS CON BAJA DISPONIBILIDAD</h2>
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="bg-red-200 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200 dark:hover:bg-gray-600">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                TIPO
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                REFERENCIA
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                CANTIDAD
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if productos_bajo_stock %}
+                        {% for producto in productos_bajo_stock %}
+                        <tr class="bg-red-50 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200 dark:hover:bg-gray-600">
+                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ producto.tipo }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ producto.referencia }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ producto.cantidad }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr class="text-center">
+                            <td></td>
+                            <td>No hay productos con stock bajo </td>
+                            <td></td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
             </div>
         </div>
         </div>
         {% include 'footer.html' %}
     </div>
-    <script>
-        // // fecha actual
-        let fechaActual = new Date();
-
-        // //Colocar el valor de el primer día del mes
-        let primerDiaMes = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1).toISOString().split('T')[0];
-        const fechaInicio = document.getElementById('fechaInicio');
-        fechaInicio.value = primerDiaMes;
-
-        // Fecha actual para el input de fecha final
-        let today = fechaActual.toISOString().split('T')[0];
-        const fechaFin = document.getElementById('fechaFin');
-        fechaFin.setAttribute('max', today);
-        console.log(today);
-        fechaFin.value = today;
-
-        const textDate = document.getElementById('textDate');
-
-        function fechaReloj() {
-            setInterval(() => {
-                fechaActual = new Date();
-                textDate.innerText = 'Fecha y hora: '+ fechaActual.toLocaleString();
-            }, 1000);
-        }
-
-    </script>
-    <script src="{{url_for('static',filename='src/js/flowbite.min.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/axios.min.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/chart.min.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/formatoMoneda.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/index.js')}}"></script>
 </body>
 </html>
