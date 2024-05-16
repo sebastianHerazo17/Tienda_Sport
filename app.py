@@ -94,5 +94,10 @@ def abono():
 def finanza(fi, ff, gb):
     return controller.finanzas(fi, ff, gb)
 
+# Ruta para descargar el archivo Excel
+@app.route('/descargar_ventas')
+def descargar_excel():
+    return controllerVenta.generar_excel()
+
 if __name__ == '__main__':
     app.run(debug=True)

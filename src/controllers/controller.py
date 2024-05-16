@@ -70,7 +70,7 @@ def finanzas(fechaIni, fechaFin, agrupar_por):
         formato = '%Y-%m-%d' 
     
     total_ingresos = session.query(func.sum(Venta.totalPagado)).filter(Venta.fecha >= fechaIni, Venta.fecha <= fechaFin).scalar() or 0
-    total_egresos = 100000
+    total_egresos = session.query(func.sum(Egresos.valor)).filter(Egresos.fecha >= fechaIni, Egresos.fecha <= fechaFin).scalar() or 0
     informePagos = (
         session.query(fecha_agrupada, func.sum(Venta.totalPagado))
         .filter(Venta.fecha >= fechaIni, Venta.fecha <= fechaFin)
@@ -86,7 +86,7 @@ def finanzas(fechaIni, fechaFin, agrupar_por):
 
     informeP = [{"fecha": info[0],"total": info[1],} for info in informePagos]
     informeC = [{"fecha": info[0],"total": info[1],} for info in informeConteo]
-
+    session.close()
     return jsonify({
         "ingresos": total_ingresos,
         "egresos": total_egresos,

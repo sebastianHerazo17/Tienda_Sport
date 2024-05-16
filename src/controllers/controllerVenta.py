@@ -1,8 +1,10 @@
-from flask import render_template, request, redirect, jsonify, url_for
+from flask import render_template, request, redirect, jsonify, url_for, send_file
 from sqlalchemy import desc
 from src.models.model import Venta, Producto, ProductosVentas, Cliente, Abono, session
 import datetime
 from src.controllers.controller import obj
+from openpyxl import Workbook
+
 
 def queryCliente():
     clientes = session.query(Cliente).all()
@@ -83,7 +85,7 @@ def registroVenta(datos):
     totalPagado = float(datos.get('totalPagado'))
     carrito = datos.get('carrito')
     for p in carrito:
-        totalPagar += (p['precio']*p['orden']) - p['descuento']
+        totalPagar += (p['precio'] - p['descuento'])
 
     nuevaVenta = Venta(
         identificacion=identificacion, 
@@ -100,10 +102,12 @@ def registroVenta(datos):
     for producto in carrito:
         idProducto = producto['idProducto']
         orden = producto['orden']
+        precio = producto['precio']
         descuento = producto['descuento']
         nuevaCompra = ProductosVentas(idProducto=idProducto, 
                     idVenta=id, 
-                    cantidad=orden, 
+                    cantidad=orden,
+                    precio=precio,
                     descuento=descuento
                     )
         session.add(nuevaCompra)
@@ -121,7 +125,7 @@ def registrarVenta():
     totalPagado = float(datos.get('totalPagado'))
     carrito = datos.get('carrito')
     for p in carrito:
-        totalPagar += (p['precio']*p['orden']) - p['descuento']
+        totalPagar += (p['precio'] - p['descuento'])
     if len(carrito) > 0:
         if (tipoPago == "De contado"):
             if (totalPagado >= totalPagar):
@@ -159,3 +163,35 @@ def registroAbono():
     session.commit()
 
     return jsonify('registrado')
+
+# Exportar Ventas
+def generar_excel():
+    resultados = session.query(Cliente, Venta, ProductosVentas, Producto).\
+    select_from(Cliente).\
+    join(Venta, Venta.identificacion == Cliente.identificacion).\
+    join(ProductosVentas, ProductosVentas.idVenta == Venta.idVenta).\
+    join(Producto, Producto.idProducto == ProductosVentas.idProducto).all()
+    session.close()
+    # Crea un libro de Excel y una hoja
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Información Ventas"
+
+    # Escribe los encabezados de las columnas
+    ws.append(["Nombre Cliente", "Celular", "ID Venta", "Tipo Pago", "Fecha", "Total Pagar", "Total Pagado",
+               "ID Producto", "Tipo Producto", "Referencia", "Cantidad Vendida", "Total Precio", "Descuento"])
+    
+    # Escribe los datos de cada venta en el archivo Excel
+    for cliente, venta, producto_venta, producto in resultados:
+        if cliente.identificacion == 1:
+            cliente.nombre = "Venta en caja"
+        if cliente.celular == "" or cliente.identificacion == 1:
+            cliente.celular = "N/A"
+        ws.append([cliente.nombre, cliente.celular, f"TS00{venta.idVenta}", venta.tipoPago, venta.fecha,
+                   venta.totalPagar, venta.totalPagado, f"PTS00{producto.idProducto}", producto.tipo, producto.referencia,
+                   producto_venta.cantidad, producto_venta.precio, producto_venta.descuento])
+
+    # Guarda el archivo Excel en el sistema de archivos
+    wb.save("informacion_ventas.xlsx")
+
+    return send_file("informacion_ventas.xlsx", as_attachment=True)

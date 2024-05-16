@@ -76,9 +76,9 @@
                     <div class="mb-2 text-4xl text-red-500 text-right text-red font-bold" id="egresos"></div>
                     <div class="text-red-500 text-right font-bold">Egresos</div>
                 </div>
-                <div class="flex flex-col bg-green-50 p-8 rounded-full">
-                    <div class="mb-2 text-4xl text-green-500 text-right font-bold" id="ganancias"></div>
-                    <div class="text-green-500 text-right font-bold">Ganancias</div>
+                <div id="contGanancias" class="flex flex-col bg-green-50 text-green-500 p-8 rounded-full">
+                    <div class="mb-2 text-4xl  text-right font-bold" id="ganancias"></div>
+                    <div class="text-right font-bold" id="etiquetaG">Ganancias</div>
                 </div>
             </div>
         </div>
@@ -98,7 +98,7 @@
             <div class="flex flex-col items-center justify-center p-2 overflow-x-auto rounded bg-gray-50 h-32 mb-4">
                 <canvas id="graficaCont"></canvas>
             </div>
-            <div class="flex flex-col items-center justify-center rounded h-28 dark:bg-gray-800">
+            <div class="flex flex-col items-center justify-center rounded h-28 mt-6">
                 <h2 class="max-w-lg text-3x1 font-semibold leading-normal text-gray-900 my-2">CLIENTES CON DEUDA MAYOR A 20 DIAS</h2>
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="bg-red-200 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200 dark:hover:bg-gray-600">
@@ -146,7 +146,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="flex flex-col items-center justify-start rounded">
+            <div class="flex flex-col items-center justify-center rounded h-28 mt-6">
                 <h2 class="max-w-lg text-3x1 font-semibold leading-normal text-gray-900 my-2">PRODUCTOS CON BAJA DISPONIBILIDAD</h2>
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="bg-red-200 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200 dark:hover:bg-gray-600">

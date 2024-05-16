@@ -295,6 +295,44 @@
                                 </script>
                             </tbody>
                         </table>
+                        {% if msg == "imposible" %}
+                        <script>
+                                Swal.fire({
+                                    title: 'NO PUDO SER POSIBLE',
+                                    text: "El producto no se puede eliminar porque tiene ventas registradas.",
+                                    icon: 'error',
+                                    showCancelButton: false,
+                                    confirmButtonColor: '#d33',
+                                    confirmButtonText: 'ENTENDIDO'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Si el usuario confirma, redirigir a la URL para eliminar el producto
+                                        window.location.href = "/productos";
+                                    }
+                                });
+                                setTimeout(() => {
+                                window.location.href = "/productos"
+                                }, 5000);
+                        </script>
+                        {% elif msg == "eliminado" %}
+                        <script>
+                            Swal.fire({
+                                    title: 'ELIMINADO',
+                                    text: "El producto pudo ser eliminado.",
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'LISTO'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Si el usuario confirma, redirigir a la URL para eliminar el producto
+                                        window.location.href = "/productos";
+                                    }
+                                });
+                                setTimeout(() => {
+                                window.location.href = "/productos"
+                                }, 5000);
+                        </script>
+                        {% endif %}
                  </div>
                 </div>
             </div>

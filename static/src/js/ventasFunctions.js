@@ -53,9 +53,12 @@ function accionCarrito(id, action) {
     let productoCarrito = carrito.find(p=> p.idProducto === producto.idProducto);
     if(producto.cantidad>0){
         if(action === 'sv'){
-            if(productoCarrito === undefined) carrito.push({...producto, orden: cantidad, descuento: 0});
+            if(productoCarrito === undefined) carrito.push({...producto, orden: cantidad, precio: (producto.precio * cantidad), descuento: 0});
             else {
-            if(productoCarrito.orden<producto.cantidad&&(productoCarrito.orden+cantidad)<=producto.cantidad) carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden += cantidad
+            if(productoCarrito.orden<producto.cantidad&&(productoCarrito.orden+cantidad)<=producto.cantidad) {
+                carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden += cantidad
+                carrito.find(p=> p.idProducto === productoCarrito.idProducto).precio = producto.precio * carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden;
+            }
             else Swal.fire("LA CANTIDAD SUPERA EL STOCK DISPONIBLE", "", "warning");
             }
         } else if(action === 'dt'){
@@ -64,7 +67,10 @@ function accionCarrito(id, action) {
                 let i = carrito.findIndex(p => p.idProducto === productoCarrito.idProducto);
                 carrito.splice(i, 1);
             }
-            else if(productoCarrito.orden>0) carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden -= cantidad;
+            else if(productoCarrito.orden>0) {
+                carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden -= cantidad;
+                carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden = producto.precio * carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden;
+            }
         }
         listarCarrito();
     } else {
@@ -88,7 +94,7 @@ function listarCarrito() {
                 ${prod.orden}
             </td>
             <td class="px-6 py-4">
-                ${moneda((prod.precio*prod.orden))}
+                ${moneda((prod.precio))}
             </td>
             <td class="px-6 py-4">
                 <div class="flex items-center">
@@ -154,7 +160,7 @@ function listarCarrito() {
 function totalProductos() {
     let total = 0;
     for (const p of carrito) {
-        total += (p.precio*p.orden);
+        total += p.precio;
     }
     return total;
 }
@@ -216,7 +222,6 @@ const tipoVenta = document.getElementById('tipoVenta');
       totalPagado:pago,
       carrito: carrito
     }
-
     Swal.fire({
         title: '¿Estás seguro de registrar la venta?',
         text: "No podrás revertir esto.",

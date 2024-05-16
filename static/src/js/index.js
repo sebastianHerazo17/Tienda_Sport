@@ -15,6 +15,8 @@ fechaFin.setAttribute('min', fechaInicio.value);
 fechaFin.setAttribute('max', today);
 console.log(today);
 fechaFin.value = today;
+const contGanancias = document.getElementById("contGanancias");
+const etiquetaG = document.getElementById("etiquetaG");
 
 function finanzas(fi, ff, group) {
     axios.get(`/finanzas/${fi}/${ff}/${group}`)
@@ -23,6 +25,15 @@ function finanzas(fi, ff, group) {
         console.log(f);
         document.getElementById("ingresos").innerText = moneda(f.ingresos);
         document.getElementById("egresos").innerText = moneda(f.egresos);
+        if(f.ganancias<0){
+            contGanancias.classList.add('bg-red-50');
+            contGanancias.classList.add('text-red-500');
+            etiquetaG.innerText = "Perdidas";
+        } else {
+            contGanancias.classList.remove('bg-red-50');
+            contGanancias.classList.remove('text-red-500');
+            etiquetaG.innerText = "Ganancias";
+        }
         document.getElementById("ganancias").innerText = moneda(f.ganancias);
         fechaFin.setAttribute('min', fechaInicio.value);
         graficaInforme(f.informePagos);
