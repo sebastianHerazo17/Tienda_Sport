@@ -99,5 +99,10 @@ def finanza(fi, ff, gb):
 def descargar_excel():
     return controllerVenta.generar_excel()
 
+# Ruta Factura
+@app.route('/factura/<id>')
+def detalle_venta(id):
+    return controllerVenta.factura_venta(id)
+
 if __name__ == '__main__':
     app.run(debug=True)

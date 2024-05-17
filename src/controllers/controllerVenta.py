@@ -145,7 +145,7 @@ def registrarVenta():
         return jsonify("vacio")
     
 
-    # REGISTRO DE ABONO
+# REGISTRO DE ABONO
 
 def registroAbono():
     datos = request.get_json()
@@ -170,7 +170,9 @@ def generar_excel():
     select_from(Cliente).\
     join(Venta, Venta.identificacion == Cliente.identificacion).\
     join(ProductosVentas, ProductosVentas.idVenta == Venta.idVenta).\
-    join(Producto, Producto.idProducto == ProductosVentas.idProducto).all()
+    join(Producto, Producto.idProducto == ProductosVentas.idProducto).\
+    order_by(desc(Venta.idVenta)).\
+    all()
     session.close()
     # Crea un libro de Excel y una hoja
     wb = Workbook()
@@ -195,3 +197,18 @@ def generar_excel():
     wb.save("informacion_ventas.xlsx")
 
     return send_file("informacion_ventas.xlsx", as_attachment=True)
+
+# FACTURA DE VENTA 
+def factura_venta(idVenta):
+    venta =  session.query(Venta).get(idVenta)
+    cliente = session.query(Cliente).get(venta.identificacion)
+    productosVendidos = session.query(ProductosVentas, Producto).\
+    select_from(ProductosVentas).\
+    filter_by(idVenta=idVenta).\
+    join(Producto, Producto.idProducto == ProductosVentas.idProducto).\
+    all()
+    session.close()
+    # ids_productos = [prod.idProducto for prod in productosVendidos]
+    # productos = session.query(Producto).filter(Producto.idProducto.in_(ids_productos)).all()
+
+    return render_template('factura.html', venta=venta, cliente=cliente, productosVendidos=productosVendidos)
