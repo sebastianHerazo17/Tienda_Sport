@@ -143,11 +143,11 @@
                                 <tbody>
                                     <tr class="bg-white border-b ">
                                         <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                            <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar tipo:</label>
+                                            <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo:</label>
                                             <input required id="tipo" type="ext" name="tipo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </td>
                                         <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                            <label for="referencia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar referencia:</label>
+                                            <label for="referencia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Referencia:</label>
                                             <input required name="referencia" type="text" id="referencia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </td>
                                         <td class="px-6 py-4">
@@ -214,7 +214,7 @@
                     
                     <div class="shadow-md rounded-md h-80">
                         <table  id="productTable" class="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                            <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
                                         TIPO
@@ -295,11 +295,49 @@
                                 </script>
                             </tbody>
                         </table>
+                        {% if msg == "imposible" %}
+                        <script>
+                                Swal.fire({
+                                    title: 'NO PUDO SER POSIBLE',
+                                    text: "El producto no se puede eliminar porque tiene ventas registradas.",
+                                    icon: 'error',
+                                    showCancelButton: false,
+                                    confirmButtonColor: '#d33',
+                                    confirmButtonText: 'ENTENDIDO'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Si el usuario confirma, redirigir a la URL para eliminar el producto
+                                        window.location.href = "/productos";
+                                    }
+                                });
+                                setTimeout(() => {
+                                window.location.href = "/productos"
+                                }, 5000);
+                        </script>
+                        {% elif msg == "eliminado" %}
+                        <script>
+                            Swal.fire({
+                                    title: 'ELIMINADO',
+                                    text: "El producto pudo ser eliminado.",
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'LISTO'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Si el usuario confirma, redirigir a la URL para eliminar el producto
+                                        window.location.href = "/productos";
+                                    }
+                                });
+                                setTimeout(() => {
+                                window.location.href = "/productos"
+                                }, 5000);
+                        </script>
+                        {% endif %}
                  </div>
                 </div>
             </div>
         </div>
-            
+        
         {% include 'footer.html' %}
     </div>
     <script src="{{url_for('static',filename='src/js/flowbite.min.js')}}"></script>

@@ -25,7 +25,7 @@ def index():
 # RUTAS PARA LOS PRODUCTOS
 @app.route('/productos', methods=['GET', 'POST'])
 def productos():
-    return controller.productos()
+    return controller.productos("")
 
 def formatear_moneda(valor):
     formato = "{:,.0f}".format(valor)
@@ -87,6 +87,19 @@ def modificarCliente(id):
 @app.route('/abono', methods=['POST'])
 def abono():
     return controllerVenta.registroAbono()
+
+#Ruta para egresos agg
+@app.route('/egresos')
+def egresos():
+    return controllerVenta.egresos()
+
+@app.route('/eliminar_egresos/<idEgresos>', methods=['GET'])
+def eliminar_egresos(idEgresos):
+    return controllerVenta.eliminar_egresos(idEgresos)
+
+@app.route('/registro_egreso', methods=['POST'])
+def registro_egreso():
+    return controllerVenta.registro_egreso()
 
 if __name__ == '__main__':
     app.run(debug=True)

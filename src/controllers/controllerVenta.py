@@ -159,3 +159,30 @@ def registroAbono():
     session.commit()
 
     return jsonify('registrado')
+
+
+# Esto es lo que vas a agregar
+def egresos():
+    egresos = session.query(Egresos).all()
+    if obj.get_boolean() is True:
+        return render_template('egresos.html', egresos=egresos)
+    else: 
+        return redirect(url_for('login'))
+    
+def eliminar_egresos(idEgresos):
+    egresos_ = session.query(Egresos).get(idEgresos)
+    if egresos_: 
+        egre = session.query(Egresos).get(idEgresos)
+        session.delete(egre)
+        session.commit()
+        return egresos()
+    
+def registro_egreso():
+    descripcion = request.form['descripcion']
+    fecha = request.form['fecha']
+    valor = float(request.form['monto'].replace('$', '').replace('.',''))
+
+    nuevo_egreso = Egresos(descripcion=descripcion, fecha=fecha, valor=valor)
+    session.add(nuevo_egreso)
+    session.commit()
+    return redirect(url_for('egresos'))

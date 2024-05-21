@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egresos</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/flowbite.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/sweetalert2.min.css')}}">
+    <script src="{{url_for('static',filename='src/js/sweetalert2.all.min.js')}}"></script>
+</head>
+
+<body>
+    {% include 'menu.html' %}    
+
+    <div class="p-4 sm:ml-64 min-h-screen">
+        <div class="p-4 rounded-lg">
+            <button data-dropdown-toggle="formulario" data-dropdown-placement="right-start" type="button" class="flex items-center justify-center focus:outline-none bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-semibold py-2 px-4 rounded-lg mb-4">
+                <svg class="w-[32px] h-[32px] text-indigo-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 12h14m-7 7V5"/>
+                </svg>   
+                Nuevo egreso             
+            </button>
+            <div id="formulario" class="fixed inset-0 bg-indigo-200 bg-opacity-50 hidden justify-center items-center">
+                <div class="bg-indigo-200 p-6 rounded-lg max-w-md">
+                    <h2 class="text-2xl font-semibold mb-4">Agregar Egreso</h2>
+                    <!-- Aquí va el formulario para agregar/editar egreso -->
+                    <form action="/registro_egreso" method="POST" class="space-y-4">
+                        <div class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                            <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción:</label>
+                            <input required name="descripcion" type="text" id="descripcion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                            <label for="fecha" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">FECHA:</label>
+                            <input required name="fecha" type="date" id="fecha" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                            <label for="monto" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">MONTO:</label>
+                            <input required oninput="formatoMoneda(event)" onblur="formatoMoneda(event)" name="monto" type="text" id="monto" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <button type="submit" class="focus:outline-none bg-blue-400 hover:bg-blue-500 text-black font-semibold py-2 px-4 rounded-lg mb-4">
+                            Agregar
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+                    <h2 class="max-w-lg text-3x1 font-semibold leading-normal text-gray-900 ">REGISTRO DE EGRESOS</h2>
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="bg-gray-200 border-b hover:bg-gray-200 ">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    ID
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    DESCRIPCIÓN
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    FECHA
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    MONTO
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for egreso in egresos %}
+                                    <tr class="bg-gray-50 border-b hover:bg-gray-100">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ egreso.idEgresos }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ egreso.descripcion }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ egreso.fecha }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ egreso.valor | moneda}}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div>
+                                                <button onclick="confirmarEliminacion('{{ egreso.idEgresos }}');" type="button" class="focus:outline-none text-red bg-red-50 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm p-2   dark:bg-white dark:hover:bg-white dark:focus:ring-white">
+                                                    <svg class="w-5 h-5 text-red-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <script>
+                                        function confirmarEliminacion(idEgreso) {
+                                            // Mostrar el mensaje de confirmación personalizado con SweetAlert
+                                            Swal.fire({
+                                                title: '¿Estás seguro?',
+                                                text: "No podrás revertir esto.",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#d33',
+                                                cancelButtonColor: '#3085d6',
+                                                confirmButtonText: 'Sí, eliminarlo!'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    // Si el usuario confirma, redirigir a la URL para eliminar el producto
+                                                    window.location.href = "/eliminar_egresos/" + idEgreso;
+                                                }
+                                            });
+                                        }
+    
+                                    </script>
+                            {% endfor %}
+                            {% if size == 2 %}
+                            <tr>
+                                <td></td>
+                                <td>No hay egresos registrados</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% include 'footer.html' %}
+    
+    <script src="{{url_for('static',filename='src/js/flowbite.min.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/formatoMoneda.js')}}"></script>
+</body>
+</html>

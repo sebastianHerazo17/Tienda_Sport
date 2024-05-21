@@ -77,10 +77,10 @@ def index():
     else: 
         return redirect(url_for('login'))
     
-def productos():
+def productos(msg):
     productos = session.query(Producto).all()
     if obj.get_boolean() is True:
-        return render_template('productos.html', productos=productos)
+        return render_template('productos.html', productos=productos, msg=msg)
     else: 
         return redirect(url_for('login'))
     

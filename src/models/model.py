@@ -58,7 +58,13 @@ class Abono(Base):
     fecha = Column(Date)
     valor = Column(Double)
 
+class Egresos(Base):
+    __tablename__= 'Egresos'
 
+    idEgresos = Column(Integer, primary_key=True)
+    descripcion = Column(String)
+    fecha = Column(Date)
+    valor = Column(Double)
 
 # Crear el motor de la base de datos (usando MySQL)
 engine = create_engine('mysql://root:@localhost/tienda')
