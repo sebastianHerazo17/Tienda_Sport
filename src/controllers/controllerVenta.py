@@ -116,7 +116,7 @@ def registroVenta(datos):
         productoMod = session.query(Producto).get(idProducto)
         productoMod.cantidad = productoMod.cantidad - orden
         session.commit()
-    
+    return id
 def registrarVenta():
     datos = request.get_json()
     identificacion = int(datos.get('identificacion'))
@@ -129,20 +129,32 @@ def registrarVenta():
     if len(carrito) > 0:
         if (tipoPago == "De contado"):
             if (totalPagado >= totalPagar):
-                registroVenta(datos=datos)
-                return jsonify("correct")
+                id = registroVenta(datos=datos)
+                return jsonify({
+                    "status": 'correct', 
+                    'id': id 
+                    })
             else:
                 return jsonify("pagoCero")
         elif (tipoPago == "Fiado"):
             if (identificacion > 1):
-                registroVenta(datos=datos)
-                return jsonify("correct")
+                id = registroVenta(datos=datos)
+                return jsonify({
+                    "status": 'correct', 
+                    'id': id 
+                    })
             else:
-                return jsonify("clienteInvalido")
+                return jsonify({
+                    "status": 'clienteInvalido'
+                    })
         else:
-            return jsonify("TipoPagoInvalido")
+            return jsonify({
+                    "status": 'TipoPagoInvalido'
+                    })
     else:
-        return jsonify("vacio")
+        return jsonify({
+                    "status": 'vacio'
+                    })
     
 
 # REGISTRO DE ABONO
@@ -201,6 +213,9 @@ def generar_excel():
 # FACTURA DE VENTA 
 def factura_venta(idVenta):
     venta =  session.query(Venta).get(idVenta)
+    abonos = []
+    if venta.tipoPago == "Fiado":
+        abonos =  session.query(Abono).filter_by(idVenta=idVenta).all()
     cliente = session.query(Cliente).get(venta.identificacion)
     productosVendidos = session.query(ProductosVentas, Producto).\
     select_from(ProductosVentas).\
@@ -211,4 +226,4 @@ def factura_venta(idVenta):
     # ids_productos = [prod.idProducto for prod in productosVendidos]
     # productos = session.query(Producto).filter(Producto.idProducto.in_(ids_productos)).all()
 
-    return render_template('factura.html', venta=venta, cliente=cliente, productosVendidos=productosVendidos)
+    return render_template('factura.html', venta=venta, cliente=cliente, productosVendidos=productosVendidos, abonos=abonos)

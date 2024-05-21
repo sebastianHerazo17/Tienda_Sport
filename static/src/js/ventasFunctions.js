@@ -233,17 +233,19 @@ const tipoVenta = document.getElementById('tipoVenta');
             axios.post('/registra_venta', venta)
             .then(msg => {
                 let resp = msg.data;
+                let status = resp.status;
                 console.log(resp);
-                if(resp === "correct"){
+                if(status === "correct"){
+                    let id = resp.id;
                     Swal.fire("Venta registrada Correctamentemente!", "", "success");
                     setTimeout(() => {
-                        location.href = "/ventas";
+                        location.href = "/factura/"+id;
                     }, 1000);
                 }
-                else if (resp === "vacio") Swal.fire("CARRITO VACIO", "El carrito no puede estar vacio.", "info");
-                else if (resp === "pagoCero") Swal.fire("Ocurrió un error", "Se debe ingresar el valor total de pago si es de contado.", "error");
-                else if (resp === "TipoPagoInvalido") Swal.fire("Ocurrió un error", "El tipo de pago no es valido.", "error");
-                else if (resp === "clienteInvalido") Swal.fire("Ocurrió un error", "Debe seleccionar un cliente para poder Fiar.", "error");
+                else if (status === "vacio") Swal.fire("CARRITO VACIO", "El carrito no puede estar vacio.", "info");
+                else if (status === "pagoCero") Swal.fire("Ocurrió un error", "Se debe ingresar el valor total de pago si es de contado.", "error");
+                else if (status === "TipoPagoInvalido") Swal.fire("Ocurrió un error", "El tipo de pago no es valido.", "error");
+                else if (status === "clienteInvalido") Swal.fire("Ocurrió un error", "Debe seleccionar un cliente para poder Fiar.", "error");
             })
             .catch(err => {
                 console.log(err);

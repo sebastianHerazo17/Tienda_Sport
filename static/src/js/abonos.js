@@ -19,7 +19,7 @@ function registroAbono(idVenta, debe){
                 if(msg == "registrado"){
                     Swal.fire('ABONO REGISTRADO', '', 'success');
                     setTimeout(() => {
-                        window.location.href = "/ventas";
+                        window.location.href = "/factura/"+info.idVenta;
                     }, 1000);
                 } else {
                     Swal.fire('ALGO FALLÓ', 'Vuelve a recargar la página', 'error');
