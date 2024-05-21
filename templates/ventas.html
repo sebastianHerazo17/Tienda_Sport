@@ -33,11 +33,17 @@
                                 </svg>
                                 Nueva venta                                
                             </a>
+                            <a href="/descargar_ventas" class="flex items-center gap-1 px-3 justify-center text-green-800 hover:text-green-600 bg-green-50 hover:bg-green-200 focus:ring-2 focus:ring-green-300 font-medium rounded-lg text-sm p-2">
+                                <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 3v4a1 1 0 0 1-1 1H5m8-2h3m-3 3h3m-4 3v6m4-3H8M19 4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1ZM8 12v6h8v-6H8Z"/>
+                                </svg>
+                                Excel                               
+                            </a>
                         </div>
-                        <div class="shadow-md rounded-md">
-                        <table id="tableVentas" class="w-full text-sm text-left rtl:text-right ">
-                            <thead class="text-xs text-center text-gray-800 uppercase bg-gray-200">
-                                <tr>
+                        <div class="shadow-md  rounded-md" style="height: 400px;">
+                        <table id="tableVentas" class="relative w-full text-sm text-left rtl:text-right ">
+                            <thead class="text-xs relative text-center text-gray-800 uppercase bg-gray-200">
+                                <tr class="sticky">
                                     <th>
                                         ID VENTA
                                     </th>
@@ -56,12 +62,11 @@
                                     <th scope="col" class="px-6 py-3">
                                         TOTAL PAGADO
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        
+                                    <th scope="col" class="py-3">
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody >
                                 {% for venta in ventas %}
                                 {% if venta.tipoPago == "Fiado" and venta.totalPagado<venta.totalPagar %}
                                 <tr class="border-b bg-red-100">
@@ -86,14 +91,20 @@
                                     <td class="px-6 py-4 text-right">
                                         {{ venta.totalPagado | moneda }}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="flex justify-center gap-2 px-6 py-4">
+                                        <div class="flex justify-start">
+                                            <a href="/factura/{{venta.idVenta}}" target="_blank" title="Factura" rel="noopener noreferrer" class="flex gap-1 items-center justify-center inline-block bg-blue-100 hover:bg-blue-200 focus:bg-blue-200 focus:ring-4 focus:outline-none focus:ring-blue-200 rounded-lg text-sm p-1.5">
+                                                <svg class="w-5 h-5 text-blue-400 hiver:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd" d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Zm2 0V2h7a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Zm.5 5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm0 5c.47 0 .917-.092 1.326-.26l1.967 1.967a1 1 0 0 0 1.414-1.414l-1.817-1.818A3.5 3.5 0 1 0 11.5 17Z" clip-rule="evenodd"/>
+                                                </svg>                                        
+                                            </a>
+                                        </div>
                                         {% if venta.tipoPago == "Fiado" and venta.totalPagado<venta.totalPagar %}
                                         <div class="flex justify-end">
-                                            <button id="dropdownButton-{{ venta.idVenta }}"  data-dropdown-toggle="dropdown-{{ venta.idVenta }}" data-dropdown-placement="left-start" class="flex gap-1 items-center justify-center inline-block text-green-800 bg-green-100 hover:bg-green-200 focus:bg-green-200 focus:ring-4 focus:outline-none focus:ring-green-200 rounded-lg text-sm p-1.5" type="button">
-                                                <svg class="w-4 h-4 text-green-800 bold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <button id="dropdownButton-{{ venta.idVenta }}" title="Abono"  data-dropdown-toggle="dropdown-{{ venta.idVenta }}" data-dropdown-placement="left-start" class="flex gap-1 items-center justify-center inline-block bg-green-100 hover:bg-green-200 focus:bg-green-200 focus:ring-4 focus:outline-none focus:ring-green-200 rounded-lg text-sm p-1.5" type="button">
+                                                <svg class="w-5 h-5 text-green-500 bold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"/>
                                                   </svg>
-                                                  <label for="abono-{{venta.idVenta}}" class="text-green-800 bold" style="cursor: pointer;">ABONO</label>
                                             </button>
                                             <!-- Dropdown menu -->
                                             <div id="dropdown-{{ venta.idVenta }}" class="z-10 hidden text-base list-none bg-gray-50 rounded-lg shadow">

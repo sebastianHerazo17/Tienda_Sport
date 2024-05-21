@@ -1,14 +1,14 @@
-function eliminarCliente(id){
+function eliminarCliente(id, cliente){
     Swal.fire({
         title: 'ANTES DE ELIMINAR',
-        text: "Al borrar este cliente se dejaran sus ventas, pero aparecerá como \"Borrado\" en el registro.",
+        text: "Al borrar a "+cliente+" se dejaran sus ventas y aparecerá como \"Borrado\" en el registro de ventas.",
         icon: 'info',
         showCancelButton: true,
         confirmButtonText: 'QUIERO BORRARLO'
     }).then((result) => {
         if (result.isConfirmed) {
             Swal.fire({
-                title: '¿Estás seguro de eliminar al cliente?',
+                title: '¿Estás seguro de eliminar al cliente: '+cliente+'?',
                 text: "No podrás revertir esto.",
                 icon: 'question',
                 showCancelButton: true,

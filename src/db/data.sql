@@ -37,7 +37,10 @@ CREATE TABLE Cliente (
   celular VARCHAR(10)  NOT NULL    ,
 PRIMARY KEY(identificacion));
 
-INSERT INTO Cliente(identificacion, nombre, celular) VALUES (0, 'Seleccionar Cliente', ' ');
+INSERT INTO Cliente(identificacion, nombre, celular) 
+VALUES 
+(1, 'Seleccionar Cliente', ''),
+(2, 'Borrado', '');
 
 
 CREATE TABLE Venta (
@@ -99,5 +102,9 @@ INSERT INTO Usuario (usuario, contraseña) VALUES
 select * FROM ProductosVentas;
 select * from Venta;
 select * from Producto;
+select *  from cliente;
+select * from abono;
+
+UPDATE Cliente SET identificacion=5 WHERE identificacion = 2;
 
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'qwe.123';

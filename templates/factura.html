@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura de Venta</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/flowbite.min.css')}}">
+</head>
+<body>
+   
+    <div class="w-full max-w-md p-4 mx-auto mt-14 bg-white border border-gray-200 rounded-lg shadow sm:p-8">
+        <a href="/ventas" style="cursor: pointer;" class="text-sm inline-block font-medium ">
+            <svg class="w-5 h-5 text-gray-400 hover:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z"/>
+            </svg>
+        </a>
+        <a onclick="print()" style="cursor: pointer;" class="text-sm inline-block font-medium ">
+            <svg class="w-5 h-5 text-gray-400 hover:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M5.617 2.076a1 1 0 0 1 1.09.217L8 3.586l1.293-1.293a1 1 0 0 1 1.414 0L12 3.586l1.293-1.293a1 1 0 0 1 1.414 0L16 3.586l1.293-1.293A1 1 0 0 1 19 3v18a1 1 0 0 1-1.707.707L16 20.414l-1.293 1.293a1 1 0 0 1-1.414 0L12 20.414l-1.293 1.293a1 1 0 0 1-1.414 0L8 20.414l-1.293 1.293A1 1 0 0 1 5 21V3a1 1 0 0 1 .617-.924ZM9 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H9Zm0 4a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Zm0 4a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z" clip-rule="evenodd"/>
+              </svg>
+        </a>
+        <div class="flex items-center justify-center mb-4">
+            <h3 class="mb-4 sw-text text-3xl font-extrabold tracking-tight leading-none md:text-3xl lg:text-3xl">TiendaSport</h3>
+        </div>
+        <div class="flow-root">
+                <ul role="list" class="divide-y divide-gray-200">
+                    <li class="py-3 sm:py-4">
+                        <div class="flex items-center ">
+                            <div class="flex-shrink-0">
+                            </div>
+                            <div class="flex-1 min-w-0 ms-4">
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                   
+                                </p>
+                                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                    
+                                </p>
+                            </div>
+                            <div class="inline-flex items-center text-1xl font-semibold text-gray-900 dark:text-white">
+                                Fecha de la venta: {{ venta.fecha }}
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="sw-text text-1xl flex-1 min-w-0 ms-4">
+                                {% if cliente.identificacion > 2 %}
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                    Cliente:
+                                </p>
+                                <p class=" text-1xl text-gray-500 truncate dark:text-gray-400">
+                                    {{ cliente.nombre }}
+                                </p>
+                                {%else%}
+                                <p class=" text-1xl text-sm font-medium text-gray-900 truncate dark:text-white">
+                                    Venta en caja
+                                </p>
+                                {%endif%}
+                            </div>
+                        </div>
+                    </li>
+                    <li class="py-3 sm:py-4">
+                        <div class="text-2xl text-center font-semibold text-gray-900 dark:text-white pb-3">
+                            Productos
+                        </div>
+                        {%for productoVendido, producto in productosVendidos%}
+                        <div class="flex items-center mb-4">
+                            <div class="flex-1 min-w-0 ms-4">
+                                <p class="sw-text text-1xl font-medium text-gray-900 truncate dark:text-white">
+                                    {{producto.tipo}} {{producto.referencia}}
+                                </p>
+                                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                    Unidades: {{productoVendido.cantidad}}
+                                </p>
+                                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                    Valor unidad: {{(productoVendido.precio/productoVendido.cantidad) | moneda}}
+                                </p>
+                                {%if productoVendido.descuento > 0%}
+                                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                    Descuento: {{productoVendido.descuento | moneda }}
+                                </p>
+                                {%endif%}
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                {{ (productoVendido.precio-productoVendido.descuento) | moneda }}
+                            </div>
+                        </div>
+                        {%endfor%}
+                    </li>
+                    {%if venta.tipoPago == "De contado" %}
+                    <li class="py-3 sm:py-4">
+                        <div class="flex items-center">
+                            <div class="flex-1 min-w-0 ms-4">
+                                <p class="text-base font-medium text-gray-900 truncate dark:text-white">
+                                    Total pagado:
+                                </p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                {{ venta.totalPagado | moneda }}
+                            </div>
+                        </div>
+                    </li>
+                    {%elif venta.tipoPago == "Fiado"%}
+                    <li class="py-3 sm:py-4">
+                        <div class="text-2xl text-center font-semibold text-gray-900 dark:text-white pb-3">
+                            Abonos
+                        </div>
+                        {%for abono in abonos%}
+                        <div class="flex items-center mb-4">
+                            <div class="flex-1 min-w-0 ms-4">
+                                <p class="sw-text text-1xl font-medium text-gray-900 truncate dark:text-white">
+                                    Abono ATS00{{abono.idAbonos}}
+                                </p>
+                                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                    Fecha: {{abono.fecha}}
+                                </p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                {{ abono.valor | moneda }}
+                            </div>
+                        </div>
+                        {%endfor%}
+                    </li>
+                    <li class="py-3 sm:py-4">
+                        <div class="flex items-center mb-4">
+                            <div class="flex-1 min-w-0 ms-4">
+                                <p class="sw-text text-1xl font-medium text-gray-900 truncate dark:text-white">
+                                    Total a pagar: 
+                                </p>
+                                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+
+                                </p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                {{ venta.totalPagar | moneda }}
+                            </div>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <div class="flex-1 min-w-0 ms-4">
+                                <p class="sw-text text-1xl font-medium text-gray-900 truncate dark:text-white">
+                                    Total pagado: 
+                                </p>
+                                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+
+                                </p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                {{ venta.totalPagado | moneda }}
+                            </div>
+                        </div>
+                    </li>
+                        {%if (venta.totalPagar - venta.totalPagado) > 0%}
+                        <li class="py-3 sm:py-4">
+                            <div class="flex items-center mb-4">
+                                <div class="flex-1 min-w-0 ms-4">
+                                    <p class="sw-text text-1xl font-medium text-gray-900 truncate dark:text-white">
+                                        Deuda total: 
+                                    </p>
+                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+    
+                                    </p>
+                                </div>
+                                <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                    {{ (venta.totalPagar - venta.totalPagado) | moneda }}
+                                </div>
+                            </div>
+                        </li>
+                        {%endif%}
+                    {%endif%}
+                </ul>
+        </div>
+    </div>
+    <script src="{{url_for('static',filename='src/js/flowbite.min.js')}}"></script>
+</body>    
+</html>

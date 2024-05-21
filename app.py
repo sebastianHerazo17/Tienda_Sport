@@ -8,7 +8,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY']='security key momently'
 
 
-
 # RUTAS PARA INICIO DE SESIÓN
 @app.route('/')
 def inicio():
@@ -26,6 +25,7 @@ def index():
 @app.route('/productos', methods=['GET', 'POST'])
 def productos():
     return controller.productos("")
+    return controller.productos("")
 
 def formatear_moneda(valor):
     formato = "{:,.0f}".format(valor)
@@ -37,6 +37,8 @@ def formatear_moneda(valor):
 def moneda_colombiana_filter(valor):
     return formatear_moneda(valor)
 
+
+# RUTAS DE PRODUCTOS
 @app.route('/registrar_productos', methods=['POST'])
 def registrar_productos():
     return controller.registrar_productos()
@@ -100,6 +102,22 @@ def eliminar_egresos(idEgresos):
 @app.route('/registro_egreso', methods=['POST'])
 def registro_egreso():
     return controllerVenta.registro_egreso()
+
+# RUTAS EXTRA
+@app.route('/finanzas/<fi>/<ff>/<gb>')
+def finanza(fi, ff, gb):
+    return controller.finanzas(fi, ff, gb)
+
+# Ruta para descargar el archivo Excel
+@app.route('/descargar_ventas')
+def descargar_excel():
+    return controllerVenta.generar_excel()
+
+# Ruta Factura
+@app.route('/factura/<id>')
+def detalle_venta(id):
+    return controllerVenta.factura_venta(id)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

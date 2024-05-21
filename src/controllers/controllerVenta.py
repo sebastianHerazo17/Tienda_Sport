@@ -1,8 +1,10 @@
-from flask import  Flask, render_template, request, redirect, url_for, jsonify
-from flask import session
-from src.models.model import *
+from flask import render_template, request, redirect, jsonify, url_for, send_file
+from sqlalchemy import desc
+from src.models.model import Venta, Producto, ProductosVentas, Cliente, Abono, Egresos, session
 import datetime
 from src.controllers.controller import obj
+from openpyxl import Workbook
+
 
 def queryCliente():
     clientes = session.query(Cliente).all()
@@ -32,7 +34,7 @@ def queryProducto():
 
 def ventas():
     if obj.get_boolean() is True:
-        ventas = session.query(Venta).all()
+        ventas = session.query(Venta).order_by(desc(Venta.idVenta)).all()
         listaCli = session.query(Cliente).all()
         nombres = {}
         for venta in ventas:
@@ -83,7 +85,7 @@ def registroVenta(datos):
     totalPagado = float(datos.get('totalPagado'))
     carrito = datos.get('carrito')
     for p in carrito:
-        totalPagar += (p['precio']*p['orden']) - p['descuento']
+        totalPagar += (p['precio'] - p['descuento'])
 
     nuevaVenta = Venta(
         identificacion=identificacion, 
@@ -100,10 +102,12 @@ def registroVenta(datos):
     for producto in carrito:
         idProducto = producto['idProducto']
         orden = producto['orden']
+        precio = producto['precio']
         descuento = producto['descuento']
         nuevaCompra = ProductosVentas(idProducto=idProducto, 
                     idVenta=id, 
-                    cantidad=orden, 
+                    cantidad=orden,
+                    precio=precio,
                     descuento=descuento
                     )
         session.add(nuevaCompra)
@@ -112,7 +116,7 @@ def registroVenta(datos):
         productoMod = session.query(Producto).get(idProducto)
         productoMod.cantidad = productoMod.cantidad - orden
         session.commit()
-    
+    return id
 def registrarVenta():
     datos = request.get_json()
     identificacion = int(datos.get('identificacion'))
@@ -121,27 +125,39 @@ def registrarVenta():
     totalPagado = float(datos.get('totalPagado'))
     carrito = datos.get('carrito')
     for p in carrito:
-        totalPagar += (p['precio']*p['orden']) - p['descuento']
+        totalPagar += (p['precio'] - p['descuento'])
     if len(carrito) > 0:
         if (tipoPago == "De contado"):
             if (totalPagado >= totalPagar):
-                registroVenta(datos=datos)
-                return jsonify("correct")
+                id = registroVenta(datos=datos)
+                return jsonify({
+                    "status": 'correct', 
+                    'id': id 
+                    })
             else:
                 return jsonify("pagoCero")
         elif (tipoPago == "Fiado"):
             if (identificacion > 1):
-                registroVenta(datos=datos)
-                return jsonify("correct")
+                id = registroVenta(datos=datos)
+                return jsonify({
+                    "status": 'correct', 
+                    'id': id 
+                    })
             else:
-                return jsonify("clienteInvalido")
+                return jsonify({
+                    "status": 'clienteInvalido'
+                    })
         else:
-            return jsonify("TipoPagoInvalido")
+            return jsonify({
+                    "status": 'TipoPagoInvalido'
+                    })
     else:
-        return jsonify("vacio")
+        return jsonify({
+                    "status": 'vacio'
+                    })
     
 
-    # REGISTRO DE ABONO
+# REGISTRO DE ABONO
 
 def registroAbono():
     datos = request.get_json()
@@ -160,8 +176,61 @@ def registroAbono():
 
     return jsonify('registrado')
 
+# Exportar Ventas
+def generar_excel():
+    resultados = session.query(Cliente, Venta, ProductosVentas, Producto).\
+    select_from(Cliente).\
+    join(Venta, Venta.identificacion == Cliente.identificacion).\
+    join(ProductosVentas, ProductosVentas.idVenta == Venta.idVenta).\
+    join(Producto, Producto.idProducto == ProductosVentas.idProducto).\
+    order_by(desc(Venta.idVenta)).\
+    all()
+    session.close()
+    # Crea un libro de Excel y una hoja
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Información Ventas"
 
-# Esto es lo que vas a agregar
+    # Escribe los encabezados de las columnas
+    ws.append(["Nombre Cliente", "Celular", "ID Venta", "Tipo Pago", "Fecha", "Total Pagar", "Total Pagado",
+               "ID Producto", "Tipo Producto", "Referencia", "Cantidad Vendida", "Total Precio", "Descuento"])
+    
+    # Escribe los datos de cada venta en el archivo Excel
+    for cliente, venta, producto_venta, producto in resultados:
+        if cliente.identificacion == 1:
+            cliente.nombre = "Venta en caja"
+        if cliente.celular == "" or cliente.identificacion == 1:
+            cliente.celular = "N/A"
+        ws.append([cliente.nombre, cliente.celular, f"TS00{venta.idVenta}", venta.tipoPago, venta.fecha,
+                   venta.totalPagar, venta.totalPagado, f"PTS00{producto.idProducto}", producto.tipo, producto.referencia,
+                   producto_venta.cantidad, producto_venta.precio, producto_venta.descuento])
+
+    # Guarda el archivo Excel en el sistema de archivos
+    wb.save("informacion_ventas.xlsx")
+
+    return send_file("informacion_ventas.xlsx", as_attachment=True)
+
+# FACTURA DE VENTA 
+def factura_venta(idVenta):
+    venta =  session.query(Venta).get(idVenta)
+    abonos = []
+    if venta.tipoPago == "Fiado":
+        abonos =  session.query(Abono).filter_by(idVenta=idVenta).all()
+    cliente = session.query(Cliente).get(venta.identificacion)
+    productosVendidos = session.query(ProductosVentas, Producto).\
+    select_from(ProductosVentas).\
+    filter_by(idVenta=idVenta).\
+    join(Producto, Producto.idProducto == ProductosVentas.idProducto).\
+    all()
+    session.close()
+    # ids_productos = [prod.idProducto for prod in productosVendidos]
+    # productos = session.query(Producto).filter(Producto.idProducto.in_(ids_productos)).all()
+
+    return render_template('factura.html', venta=venta, cliente=cliente, productosVendidos=productosVendidos, abonos=abonos)
+
+
+
+# Egresos
 def egresos():
     egresos = session.query(Egresos).all()
     if obj.get_boolean() is True:

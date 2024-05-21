@@ -93,7 +93,7 @@
                                         <div class="transition-all ease-in duration-75 mt-3 mb-3 flex items-center gap-4 justify-center">
                                             <div class="flex flex-col">
                                                 <label for="nombreCli" class="block mb-2 text-sm font-medium">Nombre del cliente:</label>
-                                                <input type="text" id="nombreCli" class=" border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nombre del cliente" required />
+                                                <input type="text" id="nombreCli" maxlength="40" class=" border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nombre del cliente" required />
                                             </div>
                                             <div class="flex flex-col">
                                                 <label for="numeroCli" class="block mb-2 text-sm font-medium ">Celular del cliente:</label>
@@ -112,7 +112,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-col w-full mt-3 items-center justify-center rounded">
+                    <div class="flex flex-col w-full h-screen mt-3 items-center justify-start rounded">
                         <h2 class="max-w-lg text-2xl font-semibold leading-normal text-gray-900">CARRITO</h2>
                         <div class="relative overflow-x-auto shadow-md mt-6 sm:rounded-lg">
                             <table class="w-full text-sm text-center rtl:text-right text-gray-500 ">
@@ -149,7 +149,6 @@
                     </div>
                 </div>
             </div>
-            
             {% include 'footer.html' %}
     </div>
     <script src="{{url_for('static',filename='src/js/axios.min.js')}}"></script>

@@ -36,14 +36,20 @@ const selectCli = document.getElementById('selectCli');
 //Registrar un cliente
 function registrarCliente() {
     let cliente = {nombre: nombreCli.value, celular: numeroCli.value}
-    axios.post('/cliente', cliente)
-    .then(msg => {
-        clientes = msg.data;
-        listarClientes();
-        nombreCli.value = "";
-        numeroCli.value = "";
-    })
-    .catch(err=>{
-        console.log(err);
-    })
+    if (nombreCli.value !== "" && numeroCli.value !== "") {
+        axios.post('/cliente', cliente)
+        .then(msg => {
+            clientes = msg.data;
+            listarClientes();
+            nombreCli.value = "";
+            numeroCli.value = "";
+            Swal.fire("Cliente registrado", "Ya puedes encontrar al cliente en la lista", "success");
+        })
+        .catch(err=>{
+             Swal.fire("Ocurrio un error", "Intentalo nuevamente, si no funciona contacta con el programador", "error");
+        })
+    } else {
+        Swal.fire("Verifica los campos", "Falta información necesaria para registrar al cliente", "warning")
+    }
+    
 }

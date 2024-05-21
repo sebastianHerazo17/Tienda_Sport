@@ -53,9 +53,12 @@ function accionCarrito(id, action) {
     let productoCarrito = carrito.find(p=> p.idProducto === producto.idProducto);
     if(producto.cantidad>0){
         if(action === 'sv'){
-            if(productoCarrito === undefined) carrito.push({...producto, orden: cantidad, descuento: 0});
+            if(productoCarrito === undefined) carrito.push({...producto, orden: cantidad, precio: (producto.precio * cantidad), descuento: 0});
             else {
-            if(productoCarrito.orden<producto.cantidad&&(productoCarrito.orden+cantidad)<=producto.cantidad) carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden += cantidad
+            if(productoCarrito.orden<producto.cantidad&&(productoCarrito.orden+cantidad)<=producto.cantidad) {
+                carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden += cantidad
+                carrito.find(p=> p.idProducto === productoCarrito.idProducto).precio = producto.precio * carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden;
+            }
             else Swal.fire("LA CANTIDAD SUPERA EL STOCK DISPONIBLE", "", "warning");
             }
         } else if(action === 'dt'){
@@ -64,7 +67,10 @@ function accionCarrito(id, action) {
                 let i = carrito.findIndex(p => p.idProducto === productoCarrito.idProducto);
                 carrito.splice(i, 1);
             }
-            else if(productoCarrito.orden>0) carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden -= cantidad;
+            else if(productoCarrito.orden>0) {
+                carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden -= cantidad;
+                carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden = producto.precio * carrito.find(p=> p.idProducto === productoCarrito.idProducto).orden;
+            }
         }
         listarCarrito();
     } else {
@@ -75,7 +81,7 @@ function accionCarrito(id, action) {
 
 function listarCarrito() {
     tabBody.innerHTML = '';
-    carrito.forEach((prod, i) => {
+    if(carrito.length>0) {carrito.forEach((prod, i) => {
         tabBody.innerHTML += `
         <tr class="bg-white">
             <td class="px-6 py-4 font-semibold text-gray-900 ">
@@ -88,7 +94,7 @@ function listarCarrito() {
                 ${prod.orden}
             </td>
             <td class="px-6 py-4">
-                ${moneda((prod.precio*prod.orden))}
+                ${moneda((prod.precio))}
             </td>
             <td class="px-6 py-4">
                 <div class="flex items-center">
@@ -147,12 +153,14 @@ function listarCarrito() {
             <td class="px-6 py-2"></td>
         </tr>
         `;
+    }
+    else tabBody.innerHTML = '<tr><td></td><td></td><td>Carrito está vacio</td><td></td><td></td></tr>';
 }
 
 function totalProductos() {
     let total = 0;
     for (const p of carrito) {
-        total += (p.precio*p.orden);
+        total += p.precio;
     }
     return total;
 }
@@ -214,7 +222,6 @@ const tipoVenta = document.getElementById('tipoVenta');
       totalPagado:pago,
       carrito: carrito
     }
-
     Swal.fire({
         title: '¿Estás seguro de registrar la venta?',
         text: "No podrás revertir esto.",
@@ -226,17 +233,19 @@ const tipoVenta = document.getElementById('tipoVenta');
             axios.post('/registra_venta', venta)
             .then(msg => {
                 let resp = msg.data;
+                let status = resp.status;
                 console.log(resp);
-                if(resp === "correct"){
+                if(status === "correct"){
+                    let id = resp.id;
                     Swal.fire("Venta registrada Correctamentemente!", "", "success");
                     setTimeout(() => {
-                        location.href = "/ventas";
+                        location.href = "/factura/"+id;
                     }, 1000);
                 }
-                else if (resp === "vacio") Swal.fire("CARRITO VACIO", "El carrito no puede estar vacio.", "info");
-                else if (resp === "pagoCero") Swal.fire("Ocurrió un error", "Se debe ingresar el valor total de pago si es de contado.", "error");
-                else if (resp === "TipoPagoInvalido") Swal.fire("Ocurrió un error", "El tipo de pago no es valido.", "error");
-                else if (resp === "clienteInvalido") Swal.fire("Ocurrió un error", "Debe seleccionar un cliente para poder Fiar.", "error");
+                else if (status === "vacio") Swal.fire("CARRITO VACIO", "El carrito no puede estar vacio.", "info");
+                else if (status === "pagoCero") Swal.fire("Ocurrió un error", "Se debe ingresar el valor total de pago si es de contado.", "error");
+                else if (status === "TipoPagoInvalido") Swal.fire("Ocurrió un error", "El tipo de pago no es valido.", "error");
+                else if (status === "clienteInvalido") Swal.fire("Ocurrió un error", "Debe seleccionar un cliente para poder Fiar.", "error");
             })
             .catch(err => {
                 console.log(err);
