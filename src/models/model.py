@@ -67,7 +67,7 @@ class Egresos(Base):
     valor = Column(Double)
 
 # Crear el motor de la base de datos (usando MySQL)
-engine = create_engine('mysql://root:qwe.123@localhost/tienda')
+engine = create_engine('mysql://root:@localhost/tienda')
 Base.metadata.create_all(engine)
 # Crear una sesión para interactuar con la base de datos
 Session = sessionmaker(bind=engine)
