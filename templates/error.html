@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocurrio un error</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/flowbite.min.css')}}">
+</head>
+<body class="bg-gray-100">
+    <div class="flex justify-center items-center h-screen">
+        <div class="max-w-xl w-full bg-white border border-gray-200 rounded-lg shadow-md p-6 overflow-x-auto">
+            <div class="text-center">
+                <div class="flex justify-center mb-4">
+                    <svg class="text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                      </svg>
+                      
+                </div>
+                <h1 class="text-3xl font-bold text-red-600 mb-4">Ocurrió un error</h1>
+                <p class="text-gray-700 mb-6 block text-left">{{ error }}</p>
+                <a href="{{ url_for('index') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                    Volver al inicio
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="{{url_for('static',filename='src/js/flowbite.min.js')}}"></script>
+</body>
+</html>

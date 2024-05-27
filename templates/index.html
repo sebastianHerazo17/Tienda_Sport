@@ -38,7 +38,10 @@
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div class="flex flex-col items-center justify-center rounded">
                     <h2 class="max-w-lg text-3xl font-semibold leading-normal text-gray-900">INFORMACIÓN PRINCIPAL</h2>
-                    <p class="font-normal text-center text-gray-400 dark:text-gray-400" id="textDate">Fecha y hora: --/--/----, --:--:-- -. -.</p>
+                    <div role="status" class="max-w-sm animate-pulse font-normal text-center text-gray-400 dark:text-gray-400" id="textDate">
+                        <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-64 mb-4"></div>
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>
                 <div class="flex items-center justify-center gap-12 p-4 rounded">
                     <div>
@@ -68,16 +71,16 @@
 
         <div class="flex items-center justify-center h-48 mb-2 rounded bg-white dark:bg-gray-800">
             <div class="flex items-center w-full justify-end gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8">
-                <div class="flex flex-col bg-indigo-50 p-8 rounded-full">
-                    <div class="mb-2 text-4xl text-indigo-400 text-right font-bold" id="ingresos"></div>
+                <div class="flex flex-col bg-indigo-50 p-8 rounded-full" title="Ingresos">
+                    <div class="mb-2 text-4xl text-indigo-400 text-right font-bold" id="ingresos"><div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div></div>
                     <div class=" text-indigo-400 text-right font-bold">Ingresos</div>
                 </div>
-                <div class="flex flex-col bg-red-50 p-8 rounded-full">
-                    <div class="mb-2 text-4xl text-red-500 text-right text-red font-bold" id="egresos"></div>
+                <div class="flex flex-col bg-red-50 p-8 rounded-full" title="Egresos">
+                    <div class="mb-2 text-4xl text-red-500 text-right text-red font-bold" id="egresos"><div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div></div>
                     <div class="text-red-500 text-right font-bold">Egresos</div>
                 </div>
-                <div id="contGanancias" class="flex flex-col bg-green-50 text-green-500 p-8 rounded-full">
-                    <div class="mb-2 text-4xl  text-right font-bold" id="ganancias"></div>
+                <div id="contGanancias" class="flex flex-col bg-green-50 text-green-500 p-8 rounded-full" title="Ganancias">
+                    <div class="mb-2 text-4xl  text-right font-bold" id="ganancias"><div class="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div></div>
                     <div class="text-right font-bold" id="etiquetaG">Ganancias</div>
                 </div>
             </div>
@@ -146,7 +149,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="flex flex-col items-center justify-center rounded h-28 mt-6">
+            <div class="flex flex-col items-center justify-center rounded mt-6">
                 <h2 class="max-w-lg text-3x1 font-semibold leading-normal text-gray-900 my-2">PRODUCTOS CON BAJA DISPONIBILIDAD</h2>
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="bg-red-200 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-red-200 dark:hover:bg-gray-600">
@@ -193,6 +196,7 @@
     </div>
     <script src="{{url_for('static',filename='src/js/axios.min.js')}}"></script>
     <script src="{{url_for('static',filename='src/js/chart.min.js')}}"></script>
+    <script src="{{url_for('static',filename='src/js/flowbite.min.js')}}"></script>
     <script src="{{url_for('static',filename='src/js/formatoMoneda.js')}}"></script>
     <script src="{{url_for('static',filename='src/js/index.js')}}"></script>
 </body>

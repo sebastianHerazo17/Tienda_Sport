@@ -54,7 +54,7 @@ vistaGraf.addEventListener('change', () => { finanzas(fechaInicio.value, fechaFi
 const textDate = document.getElementById('textDate');
 setInterval(() => {
     fechaActual = new Date();
-    textDate.innerText = 'Fecha y hora: '+ fechaActual.toLocaleString();
+    textDate.innerHTML = 'Fecha y hora: '+ fechaActual.toLocaleString();
 }, 1000);
 
 

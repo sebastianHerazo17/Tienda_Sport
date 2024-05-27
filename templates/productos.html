@@ -65,11 +65,11 @@
                                 <tr class="bg-white border-b ">
                                     <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de producto:</label>
-                                        <input id="tipo" type="text" value="{{ producto.tipo }}" name="tipo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                        <input id="tipo" type="text" value="{{ producto.tipo }}" name="tipo" maxlength="30" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     </td>
                                     <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                         <label for="referencia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Referencia del producto:</label>
-                                        <input name="referencia" type="text" value="{{ producto.referencia }}" id="referencia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                        <input name="referencia" type="text" value="{{ producto.referencia }}" maxlength="30" id="referencia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center">
@@ -143,12 +143,12 @@
                                 <tbody>
                                     <tr class="bg-white border-b ">
                                         <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                            <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar tipo:</label>
-                                            <input required id="tipo" type="ext" name="tipo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo:</label>
+                                            <input required id="tipo" type="ext" name="tipo" maxlength="30" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </td>
                                         <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                            <label for="referencia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar referencia:</label>
-                                            <input required name="referencia" type="text" id="referencia" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <label for="referencia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Referencia:</label>
+                                            <input required name="referencia" type="text" id="referencia" maxlength="30" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center">
@@ -201,12 +201,15 @@
         <div class="flex items-center justify-center h-full mb-4 rounded bg-white dark:bg-gray-800 ">
             <div class="flex flex-col items-center w-full justify-center mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 ">
                 <div class="flex flex-wrap w-full p-4 gap-6 items-end ms-8">
-                    <div class="bg-white dark:bg-gray-900">
-                        <div class="relative mt-1 flex items-center gap-4 justify-center">
-                            <div class="flex flex-col text-gray-900 dark:text-white">
-                                <label for="tipo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Buscar:</label>
-                                <input id="searchInput" oninput="buscar('productTable','searchInput')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <div class="max-w-md">   
+                        <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Buscar producto</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
                             </div>
+                            <input type="search" id="searchInput" oninput="buscar('productTable','searchInput')" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar producto">
                         </div>
                     </div>
                 </div>
@@ -214,7 +217,7 @@
                     
                     <div class="shadow-md rounded-md h-80">
                         <table  id="productTable" class="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                            <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
                                         TIPO
@@ -337,7 +340,7 @@
                 </div>
             </div>
         </div>
-            
+        
         {% include 'footer.html' %}
     </div>
     <script src="{{url_for('static',filename='src/js/flowbite.min.js')}}"></script>

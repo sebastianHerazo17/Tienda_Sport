@@ -25,6 +25,7 @@ def index():
 @app.route('/productos', methods=['GET', 'POST'])
 def productos():
     return controller.productos("")
+    return controller.productos("")
 
 def formatear_moneda(valor):
     formato = "{:,.0f}".format(valor)
@@ -89,6 +90,19 @@ def modificarCliente(id):
 def abono():
     return controllerVenta.registroAbono()
 
+#Ruta para egresos agg
+@app.route('/egresos')
+def egresos():
+    return controllerVenta.egresos()
+
+@app.route('/eliminar_egresos/<idEgresos>', methods=['GET'])
+def eliminar_egresos(idEgresos):
+    return controllerVenta.eliminar_egresos(idEgresos)
+
+@app.route('/registro_egreso', methods=['POST'])
+def registro_egreso():
+    return controllerVenta.registro_egreso()
+
 # RUTAS EXTRA
 @app.route('/finanzas/<fi>/<ff>/<gb>')
 def finanza(fi, ff, gb):
@@ -103,6 +117,7 @@ def descargar_excel():
 @app.route('/factura/<id>')
 def detalle_venta(id):
     return controllerVenta.factura_venta(id)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
